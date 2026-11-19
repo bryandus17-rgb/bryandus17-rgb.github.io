@@ -210,6 +210,19 @@
   .tabs button:hover{color:var(--text);border-color:var(--cyan)}
   .tabs button[aria-selected=true]{background:rgba(255,122,26,.14);color:var(--accent);border-color:var(--accent)}
   #ensDesc{color:var(--muted);max-width:760px;margin-bottom:18px;min-height:3.2em}
+  .fea{display:grid;grid-template-columns:1.35fr 1fr;gap:26px;align-items:center;background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px}
+  .fea-img{position:relative;display:block;padding:0;border:1px solid var(--border);border-radius:12px;overflow:hidden;cursor:zoom-in;background:#0b1220}
+  .fea-img img{display:block;width:100%;height:auto;transition:transform .5s}
+  .fea-img:hover img{transform:scale(1.02)}
+  .fea-img .lupa{position:absolute;right:12px;bottom:12px;font-family:var(--mono);font-size:.72rem;padding:6px 12px;border-radius:99px;background:rgba(255,122,26,.92);color:#1a0d02}
+  .fea-txt h3{margin:8px 0 10px;font-size:1.4rem}
+  .fea-txt p{color:var(--muted);margin:0 0 12px}
+  .fea-kpi{list-style:none;padding:0;margin:0 0 12px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .fea-kpi li{border:1px solid var(--border);border-radius:10px;padding:10px;background:rgba(92,200,255,.05)}
+  .fea-kpi b{display:block;font-family:var(--mono);font-size:1.35rem;color:var(--accent)}
+  .fea-kpi span{font-size:.78rem;color:var(--muted)}
+  .fea-con{color:var(--text)!important}
+  @media (max-width:900px){.fea{grid-template-columns:1fr}}
   .ens-wrap{display:grid;grid-template-columns:190px 1fr;gap:18px;align-items:start}
   .thumbs{display:flex;flex-direction:column;gap:12px}
   .thumb{display:flex;flex-direction:column;gap:6px;background:none;border:0;padding:0;cursor:pointer;text-align:left;color:var(--muted);font:500 .88rem var(--sans)}
@@ -233,7 +246,7 @@
   .plano figcaption .mono{color:#c2560a}
 
   /* SKILLS */
-  .skills{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+  .skills{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
   .skill{border:1px solid var(--border);border-radius:12px;padding:22px;background:rgba(17,28,47,.6)}
   .skill .ico{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;background:rgba(255,122,26,.12);margin-bottom:14px}
   .skill h4{font-size:1.05rem;margin-bottom:8px}
@@ -276,6 +289,7 @@
       <li><a href="#proyectos">Proyectos</a></li>
       <li><a href="#aplicados">Aplicados</a></li>
       <li><a href="#ensamble">Ensambles</a></li>
+      <li><a href="#analisis">Análisis</a></li>
       <li><a href="#impresion">Impresión 3D</a></li>
       <li><a href="#habilidades">Habilidades</a></li>
       <li><a href="#contacto">Contacto</a></li>
@@ -349,10 +363,35 @@
   </div>
 </section>
 
+<section id="analisis">
+  <div class="wrap">
+    <div class="head reveal">
+      <div class="mono">04 — Análisis</div>
+      <h2>Análisis de esfuerzos</h2>
+      <p>No basta con que una pieza se vea bien: tiene que aguantar. Simulo por elementos finitos cómo trabajan mis piezas impresas, considerando el material, las paredes y el porcentaje de relleno.</p>
+    </div>
+    <div class="fea reveal">
+      <button type="button" class="fea-img" id="feaImg" aria-label="Ampliar lámina de análisis de esfuerzos"><img src="planos/analisis-esfuerzos-secadora-m.jpg" alt="Lámina de análisis de esfuerzos de los sujetadores de la secadora" loading="lazy"><span class="lupa">🔍 Ampliar</span></button>
+      <div class="fea-txt">
+        <div class="mono">Análisis de esfuerzos · MEF</div>
+        <h3>¿Aguantan los sujetadores de la secadora?</h3>
+        <p>Analicé por elementos finitos los dos brazos que sostienen la boquilla secadora sobre el tornillo sin fin, impresos en ABS con 2 paredes y 50 % de relleno. Tomé la geometría, el material y el peso de la boquilla de Inventor y consideré un caso de servicio y uno accidental.</p>
+        <ul class="fea-kpi">
+          <li><b>43</b><span>Factor de seguridad en servicio</span></li>
+          <li><b>6,7</b><span>FS con 3 kg apoyados (accidental)</span></li>
+          <li><b>0,04 mm</b><span>Flecha en servicio</span></li>
+        </ul>
+        <p class="fea-con">Conclusión: la pieza está sobredimensionada. Con 20–30 % de relleno seguiría siendo segura y ahorraría filamento y tiempo de impresión.</p>
+        <a class="link" href="planos/analisis-esfuerzos-secadora.pdf">Ver lámina en PDF (A3) →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section id="impresion">
   <div class="wrap">
     <div class="head reveal">
-      <div class="mono">04 — Impresión 3D</div>
+      <div class="mono">05 — Impresión 3D</div>
       <h2>Experiencia en impresión 3D</h2>
       <p>Imprimo en una impresora de doble boquilla con cámara cerrada, lo que me permite trabajar con materiales técnicos como el ABS y hacer piezas de varios colores. Estos son algunos trabajos, grabados mientras se imprimían.</p>
     </div>
@@ -365,13 +404,14 @@
 <section id="habilidades">
   <div class="wrap">
     <div class="head reveal">
-      <div class="mono">05 — Habilidades</div>
+      <div class="mono">06 — Habilidades</div>
       <h2>Lo que sé hacer</h2>
     </div>
     <div class="skills">
       <div class="skill reveal"><div class="ico">📐</div><h4>Diseño 3D</h4><ul><li>Fusion 360</li><li>Autodesk Inventor</li><li>Ensambles y piezas</li></ul></div>
       <div class="skill reveal"><div class="ico">🖨️</div><h4>Impresión 3D</h4><ul><li>Diseño para FDM</li><li>Preparación de STL</li><li>Prototipos funcionales</li></ul></div>
       <div class="skill reveal"><div class="ico">📄</div><h4>Planos</h4><ul><li>Dibujo mecánico</li><li>Vistas y cotas</li><li>Normas de dibujo</li></ul></div>
+      <div class="skill reveal"><div class="ico">🧮</div><h4>Análisis</h4><ul><li>Esfuerzos por elementos finitos</li><li>Factor de seguridad</li><li>Piezas impresas con relleno</li></ul></div>
       <div class="skill reveal"><div class="ico">⚡</div><h4>Electrónica</h4><ul><li>Programación ESP32</li><li>PLC (básico)</li><li>Procesamiento de imágenes</li></ul></div>
     </div>
   </div>
@@ -381,15 +421,13 @@
   <div class="wrap">
     <div class="contact reveal">
       <div>
-        <div class="mono">06 — Contacto</div>
+        <div class="mono">07 — Contacto</div>
         <h2>¿Trabajamos juntos?</h2>
         <p>Busco prácticas preprofesionales en diseño 3D, impresión 3D, diseño mecánico o automatización en Lima.</p>
       </div>
       <div class="links">
-        <!-- CAMBIA: pon tus datos reales -->
-        <a href="mailto:tu-correo@ejemplo.com">Correo <small>tu-correo@ejemplo.com</small></a>
-        <a href="https://www.linkedin.com/in/tu-usuario">LinkedIn <small>/in/tu-usuario</small></a>
-        <a href="https://github.com/bryandus17-rgb">GitHub <small>@bryandus17-rgb</small></a>
+        <a href="mailto:bryandus17@gmail.com?subject=Contacto%20desde%20tu%20portafolio">Correo <small>bryandus17@gmail.com</small></a>
+        <a href="https://wa.me/51945244978?text=Hola%20Bryan%2C%20vi%20tu%20portafolio%20y%20me%20gustar%C3%ADa%20conversar%20contigo." target="_blank" rel="noopener">WhatsApp <small>+51 945 244 978</small></a>
       </div>
     </div>
   </div>
@@ -939,10 +977,12 @@ const lb = document.getElementById('lb'), lbImg = lb.querySelector('img'), lbCap
 let lbSet = [], lbI = 0;
 const lbShow = () => { const m = lbSet[lbI]; lbImg.src = m.src + '.jpg'; lbImg.alt = m.titulo; lbCap.textContent = m.titulo; lbL.classList.remove('z'); lbImg.style.transform = '';
   lb.querySelectorAll('.nav').forEach(b => b.style.display = lbSet.length > 1 ? '' : 'none'); };
-const abrirLB = (set, i) => { lbSet = set; lbI = i; lbShow(); lb.classList.add('on'); document.body.style.overflow = 'hidden'; };
+let lbT = 0;
+const abrirLB = (set, i) => { lbSet = set; lbI = i; lbShow(); lb.classList.add('on'); lbT = performance.now(); document.body.style.overflow = 'hidden'; };
+document.getElementById('feaImg').onclick = () => abrirLB([{ src: 'planos/analisis-esfuerzos-secadora', titulo: 'Análisis de esfuerzos · Sujetadores de secadora (lámina AE-01)' }], 0);
 const cerrarLB = () => { lb.classList.remove('on'); document.body.style.overflow = ''; };
 lb.querySelector('.cerrar').onclick = cerrarLB;
-lb.onclick = e => { if (e.target === lb) cerrarLB(); };
+lb.onclick = e => { if (e.target === lb && performance.now() - lbT > 450) cerrarLB(); };
 lb.querySelector('.prev').onclick = () => { lbI = (lbI - 1 + lbSet.length) % lbSet.length; lbShow(); };
 lb.querySelector('.next').onclick = () => { lbI = (lbI + 1) % lbSet.length; lbShow(); };
 lbL.onclick = e => {
