@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="es">
+<script>document.documentElement.classList.add('js')</script>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bryan Quino Ponce — Portafolio de diseño 3D</title>
+<link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="img/favicon-180.png">
+<!-- CAMBIA: descripción que aparece en Google -->
+<meta name="description" content="Portafolio de Bryan Quino Ponce, estudiante de Ingeniería Mecatrónica en Lima: diseño 3D, impresión 3D, planos técnicos y prototipos con ESP32.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b1220; --bg2:#101a2c; --line:rgba(120,170,255,.08); --card:#111c2f;
+    --text:#e6edf3; --muted:#8b9bb4; --accent:#ff7a1a; --cyan:#5cc8ff; --border:rgba(140,170,220,.16);
+    --mono:'JetBrains Mono',ui-monospace,monospace; --sans:'Space Grotesk',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.6;
+    background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+    background-size:32px 32px;}
+  a{color:inherit}
+  .wrap{max-width:1150px;margin:0 auto;padding:0 24px}
+  .mono{font-family:var(--mono);font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;color:var(--cyan)}
+
+  /* NAV */
+  nav{position:sticky;top:0;z-index:10;backdrop-filter:blur(10px);background:rgba(11,18,32,.75);border-bottom:1px solid var(--border)}
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .logo{display:flex;align-items:center;gap:4px;font-weight:700;letter-spacing:.02em;text-decoration:none;color:var(--text)}
+  .logo img{height:50px;width:auto;display:block}
+  .logo b{font-size:.95rem;line-height:1.05}
+  .logo span{color:var(--accent)}
+  nav ul{display:flex;gap:28px;list-style:none}
+  nav ul a{text-decoration:none;color:var(--muted);font-size:.95rem;transition:color .2s}
+  nav ul a:hover{color:var(--text)}
+
+  /* HERO */
+  .hero{display:grid;grid-template-columns:1.05fr 1fr;gap:32px;align-items:center;padding:56px 24px 24px;position:relative}
+  .hero h1{font-size:clamp(2.2rem,5vw,3.8rem);line-height:1.05;margin:16px 0 20px;font-weight:700}
+  .hero h1 em{font-style:normal;color:var(--accent)}
+  .hero p.lead{color:var(--muted);font-size:1.15rem;max-width:520px}
+  .btns{display:flex;gap:14px;margin-top:32px;flex-wrap:wrap}
+  .btn{display:inline-block;padding:12px 22px;border-radius:8px;text-decoration:none;font-weight:500;transition:transform .2s,background .2s}
+  .btn.primary{background:var(--accent);color:#1a0d02}
+  .btn.ghost{border:1px solid var(--border)}
+  .btn:hover{transform:translateY(-2px)}
+  .hero-3d{position:relative;z-index:1;height:520px;cursor:pointer;border:1px solid var(--border);border-radius:16px;background:radial-gradient(circle at 50% 45%,rgba(92,200,255,.10),transparent 65%)}
+  .hero-3d .tag{position:absolute;left:16px;bottom:14px;z-index:2;pointer-events:none;right:16px}
+  .hero-3d canvas{position:absolute;inset:0;border-radius:16px;display:block}
+  .corner{position:absolute;width:18px;height:18px;border-color:var(--cyan);border-style:solid;opacity:.6}
+  .c1{top:10px;left:10px;border-width:1px 0 0 1px}.c2{top:10px;right:10px;border-width:1px 1px 0 0}
+  .c3{bottom:10px;right:10px;border-width:0 1px 1px 0}.c4{bottom:10px;left:10px;border-width:0 0 1px 1px}
+  .stats{display:flex;gap:36px;margin-top:44px;flex-wrap:wrap}
+  .stats b{display:block;font-size:1.05rem}
+  .stats small{color:var(--muted)}
+
+  /* SECTIONS */
+  section{padding:80px 0;position:relative}
+  #proyectos{padding-top:40px}
+  body{overflow-x:hidden}
+  .wrap{position:relative;z-index:1}
+  .deco{position:absolute;z-index:0;pointer-events:none;color:#8fc8ff;opacity:.13}
+  .deco svg{width:100%;height:auto;display:block}
+  @media (max-width:900px){.deco{opacity:.05}}
+  .hero-3d{transition:box-shadow .4s}
+  .hero-3d .tag{transition:color .3s}
+  .head{margin-bottom:40px}
+  .head h2{font-size:clamp(1.8rem,3.5vw,2.6rem);margin-top:8px}
+  .head p{color:var(--muted);max-width:620px;margin-top:8px}
+
+  /* PROJECTS */
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:transform .3s,border-color .3s}
+  .card:hover{transform:translateY(-4px);border-color:rgba(255,122,26,.5)}
+  .viewer{position:relative;height:300px;background:radial-gradient(circle at 50% 40%,#18263f,#0d1626);cursor:grab}
+  .viewer:active{cursor:grabbing}
+  .viewer canvas{display:block;width:100%!important;height:100%!important}
+  .viewer .hint{position:absolute;right:12px;top:10px;font-family:var(--mono);font-size:.7rem;color:var(--muted);pointer-events:none}
+  .viewer.no-webgl::after{content:'Tu navegador no muestra 3D';position:absolute;inset:0;display:grid;place-items:center;color:var(--muted)}
+  .card .body{padding:20px 22px 24px}
+  .card h3{font-size:1.25rem;margin-bottom:6px}
+  .card p{color:var(--muted);font-size:.95rem}
+  .tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .tags span{font-family:var(--mono);font-size:.72rem;padding:4px 10px;border-radius:99px;border:1px solid var(--border);color:var(--cyan)}
+  .card .link{display:inline-block;margin-top:16px;color:var(--accent);text-decoration:none;font-weight:500}
+  .card .link:hover{text-decoration:underline}
+
+  /* PIEZAS: plano · 3D · video */
+  .piezas{display:flex;flex-direction:column;gap:32px}
+  .pieza{background:var(--card);border:1px solid var(--border);border-radius:18px;overflow:hidden}
+  .tri{display:flex;height:400px;gap:2px;background:var(--border)}
+  .panel{position:relative;flex:1;min-width:0;overflow:hidden;background:#0d1626;transition:flex .7s cubic-bezier(.2,.8,.2,1)}
+  .panel.p3d{flex:1.7}
+  @media (hover:hover) and (min-width:801px){
+    .tri:hover .panel{flex:.75}
+    .tri .panel:hover{flex:2.6}
+  }
+  .panel .tag{position:absolute;left:12px;top:10px;z-index:2;font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:99px;background:rgba(11,18,32,.75);color:var(--cyan);border:1px solid var(--border);pointer-events:none;white-space:nowrap}
+  .panel .tag b{color:var(--accent);font-weight:500;margin-right:6px}
+  .panel.pplano{background:#fff}
+  .panel.pplano .tag{background:rgba(255,255,255,.9);color:#1b2535;border-color:#d6dbe3}
+  .panel.pplano a{display:block;width:100%;height:100%}
+  .panel.pplano img{width:100%;height:100%;object-fit:contain;padding:28px 8px 8px;transition:transform .6s}
+  .panel.pplano:hover img{transform:scale(1.04)}
+  .panel .viewer{height:100%}
+  .panel video{width:100%;height:100%;object-fit:cover;display:block}
+  .pieza .body{display:grid;grid-template-columns:1.5fr 1fr;gap:28px;padding:24px 28px}
+  .pieza h3{font-size:1.4rem;margin-bottom:6px}
+  .pieza .body p{color:var(--muted)}
+  .specs{list-style:none;font-size:.92rem;border-left:1px solid var(--border);padding-left:22px;display:grid;gap:8px;align-content:start}
+  .specs li{display:flex;justify-content:space-between;gap:12px}
+  .specs span{color:var(--muted)}
+  .specs b{font-weight:500;text-align:right}
+  .flujo{font-family:var(--mono);font-size:.75rem;color:var(--muted);margin-top:14px;letter-spacing:.04em}
+  .flujo i{font-style:normal;color:var(--accent)}
+  @media (max-width:800px){
+    .tri{height:320px;overflow-x:auto;scroll-snap-type:x mandatory;gap:0;scrollbar-width:none}
+    .tri::-webkit-scrollbar{display:none}
+    .panel,.panel.p3d{flex:0 0 86%;scroll-snap-align:center;border-right:2px solid var(--border)}
+    .pieza .body{grid-template-columns:1fr}
+    .specs{border-left:0;padding-left:0;border-top:1px solid var(--border);padding-top:14px}
+  }
+
+  /* IMPRESIÓN 3D */
+  .mats{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:40px}
+  .mat{border:1px solid var(--border);border-radius:14px;padding:20px 22px;background:rgba(17,28,47,.7)}
+  .mat h4{font-size:1.15rem;display:flex;align-items:center;gap:10px}
+  .mat h4 i{width:12px;height:12px;border-radius:50%;display:inline-block}
+  .mat .temps{display:flex;gap:16px;margin:12px 0 10px;font-family:var(--mono);font-size:.8rem}
+  .mat .temps div{flex:1;border:1px solid var(--border);border-radius:10px;padding:8px 10px}
+  .mat .temps small{display:block;color:var(--muted);font-size:.68rem;text-transform:uppercase;letter-spacing:.06em}
+  .mat .temps b{font-size:1rem;color:var(--text);font-weight:500}
+  .mat p{color:var(--muted);font-size:.9rem}
+  .imps{display:grid;grid-template-columns:repeat(6,1fr);gap:24px}
+  .imp{grid-column:span 2;background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+  .imp.grande{grid-column:span 6;flex-direction:row}
+  .imp.grande .vid{flex:1.4;aspect-ratio:auto;min-height:360px}
+  .imp.grande .txt{flex:1}
+  .imp .vid{position:relative;aspect-ratio:16/9;background:#0d1626;overflow:hidden}
+  .imp video{width:100%;height:100%;object-fit:cover;display:block}
+  .imp .vid .badge{position:absolute;left:12px;top:12px;font-family:var(--mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;padding:4px 10px;border-radius:99px;background:rgba(11,18,32,.8);border:1px solid var(--border)}
+  .imp .txt{padding:20px 22px 24px}
+  .imp h3{font-size:1.2rem;margin-bottom:8px}
+  .imp p{color:var(--muted);font-size:.95rem}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .chips span{font-family:var(--mono);font-size:.72rem;padding:4px 10px;border-radius:99px;border:1px solid var(--border);color:var(--cyan)}
+  .nota{color:var(--muted);font-size:.8rem;margin-top:-26px;margin-bottom:36px}
+  @media (max-width:1000px){.imp{grid-column:span 3}}
+  @media (max-width:900px){.mats{grid-template-columns:1fr}.imps{grid-template-columns:1fr}.imp,.imp.grande{grid-column:auto}.imp.grande{flex-direction:column}.imp.grande .vid{min-height:0;aspect-ratio:16/9}}
+
+  /* PROYECTOS APLICADOS */
+  .aps{display:flex;flex-direction:column;gap:34px}
+  .ap{display:grid;grid-template-columns:1fr 1.2fr;grid-template-areas:"m3d media" "body body";background:var(--card);border:1px solid var(--border);border-radius:18px;overflow:hidden}
+  .ap.inv{grid-template-columns:1.2fr 1fr;grid-template-areas:"media m3d" "body body"}
+  .ap-3d{grid-area:m3d;position:relative;min-height:420px;background:radial-gradient(circle at 50% 40%,#1a2a44,#0d1626)}
+  .ap-3d .viewer{position:absolute;inset:0;height:auto;background:none;cursor:grab;touch-action:pan-y;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+  .ap-3d .viewer.drag{cursor:grabbing}
+  .ap-3d .giro{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;pointer-events:none}
+  .ap-3d .tag,.ap-media .tag{position:absolute;left:12px;top:10px;z-index:2;font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:99px;background:rgba(11,18,32,.78);color:var(--cyan);border:1px solid var(--border);pointer-events:none}
+  .ap-media{grid-area:media;display:flex;flex-direction:column;border-left:1px solid var(--border);min-width:0}
+  .ap.inv .ap-media{border-left:0;border-right:1px solid var(--border)}
+  .ap-main{position:relative;flex:1;min-height:320px;background:#0d1626;overflow:hidden}
+  .ap-main img,.ap-main video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#0b1220}
+  .ap-main.zoom{cursor:zoom-in}
+  .ap-main .lupa{position:absolute;right:12px;bottom:12px;font-family:var(--mono);font-size:.72rem;padding:6px 12px;border-radius:99px;background:rgba(255,122,26,.92);color:#1a0d02;opacity:0;transform:translateY(6px);transition:all .25s;pointer-events:none}
+  .ap-main.zoom:hover .lupa{opacity:1;transform:none}
+  @media (hover:none){.ap-main.zoom .lupa{opacity:1;transform:none}}
+  .ap-thumbs{display:flex;gap:8px;padding:10px 12px;border-top:1px solid var(--border);overflow-x:auto;scrollbar-width:thin}
+  .ap-thumbs button{position:relative;flex:0 0 84px;height:60px;border-radius:8px;overflow:hidden;border:2px solid var(--border);padding:0;cursor:pointer;background:#0d1626;transition:border-color .2s}
+  .ap-thumbs button img{width:100%;height:100%;object-fit:cover;display:block}
+  .ap-thumbs button[aria-current=true]{border-color:var(--accent)}
+  .ap-thumbs button span{position:absolute;left:3px;bottom:3px;font:500 .58rem var(--mono);padding:1px 5px;border-radius:4px;background:rgba(11,18,32,.85);color:var(--cyan)}
+  .ap-body{grid-area:body;padding:22px 26px 26px;border-top:1px solid var(--border);display:grid;grid-template-columns:1.6fr 1fr;gap:28px}
+  .ap-body h3{font-size:1.4rem}
+  .ap-body .sub{font-family:var(--mono);font-size:.78rem;color:var(--accent);margin:4px 0 12px;letter-spacing:.03em}
+  .ap-body p{color:var(--muted);margin-bottom:10px}
+  .ap-body .lugar{display:inline-block;font-size:.85rem;color:var(--text);border:1px solid rgba(255,122,26,.45);background:rgba(255,122,26,.08);padding:6px 12px;border-radius:10px;margin-bottom:12px}
+  .ap-body aside{border-left:1px solid var(--border);padding-left:22px}
+  .ap-body aside h4{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+  @media (max-width:900px){
+    .ap,.ap.inv{grid-template-columns:1fr;grid-template-areas:"media" "m3d" "body"}
+    .ap-3d{min-height:300px}.ap-main{min-height:260px}
+    .ap-media,.ap.inv .ap-media{border:0;border-bottom:1px solid var(--border)}
+    .ap-body{grid-template-columns:1fr}.ap-body aside{border-left:0;padding-left:0}
+  }
+  /* visor ampliado (zoom) */
+  #lb{position:fixed;inset:0;z-index:50;background:rgba(5,9,16,.94);display:none;flex-direction:column;align-items:center;justify-content:center}
+  #lb.on{display:flex}
+  #lb .lienzo{position:relative;width:92vw;height:80vh;overflow:hidden;cursor:zoom-in;touch-action:pinch-zoom}
+  #lb .lienzo.z{cursor:zoom-out}
+  #lb img{width:100%;height:100%;object-fit:contain;transition:transform .25s ease;transform-origin:50% 50%;user-select:none;-webkit-user-drag:none}
+  #lb .cap{color:var(--muted);font-size:.92rem;margin-top:14px;text-align:center;padding:0 20px}
+  #lb .cerrar,#lb .nav{position:absolute;background:rgba(17,28,47,.9);border:1px solid var(--border);color:var(--text);border-radius:99px;cursor:pointer;font:500 1rem var(--sans)}
+  #lb .cerrar{top:18px;right:18px;padding:8px 16px}
+  #lb .nav{top:50%;transform:translateY(-50%);width:46px;height:46px;font-size:1.3rem}
+  #lb .prev{left:18px}#lb .next{right:18px}
+
+  /* ENSAMBLE */
+  .ens{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden}
+  .viewer.big{height:560px}
+  .ens-ui{display:flex;align-items:center;gap:20px;flex-wrap:wrap;padding:18px 22px;border-top:1px solid var(--border)}
+  .ens-ui button{background:var(--accent);color:#1a0d02;border:0;border-radius:8px;padding:10px 18px;font:500 1rem var(--sans);cursor:pointer}
+  .ens-ui label{color:var(--muted);font-size:.92rem;display:flex;align-items:center;gap:8px}
+  .ens-ui input[type=range]{flex:1;min-width:160px;accent-color:var(--accent)}
+  .ens-ui .mono{margin-left:auto}
+  .tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+  .tabs button{background:transparent;color:var(--muted);border:1px solid var(--border);border-radius:99px;padding:8px 16px;font:500 .95rem var(--sans);cursor:pointer;transition:all .2s}
+  .tabs button:hover{color:var(--text);border-color:var(--cyan)}
+  .tabs button[aria-selected=true]{background:rgba(255,122,26,.14);color:var(--accent);border-color:var(--accent)}
+  #ensDesc{color:var(--muted);max-width:760px;margin-bottom:18px;min-height:3.2em}
+  .ens-wrap{display:grid;grid-template-columns:190px 1fr;gap:18px;align-items:start}
+  .thumbs{display:flex;flex-direction:column;gap:12px}
+  .thumb{display:flex;flex-direction:column;gap:6px;background:none;border:0;padding:0;cursor:pointer;text-align:left;color:var(--muted);font:500 .88rem var(--sans)}
+  .thumb .img{position:relative;border:2px solid var(--border);border-radius:10px;overflow:hidden;aspect-ratio:4/3;background:#0d1626;transition:border-color .25s,transform .25s}
+  .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+  .thumb .num{position:absolute;left:6px;top:4px;font-family:var(--mono);font-size:.7rem;color:var(--muted)}
+  .thumb small{font-family:var(--mono);font-size:.68rem;color:var(--muted);opacity:.8}
+  .thumb:hover .img{border-color:var(--cyan);transform:translateX(3px)}
+  .thumb[aria-selected=true]{color:var(--text)}
+  .thumb[aria-selected=true] .img{border-color:var(--accent);box-shadow:0 0 0 3px rgba(255,122,26,.18)}
+  @media (max-width:800px){.ens-wrap{grid-template-columns:1fr}.thumbs{flex-direction:row;overflow-x:auto}.thumb{flex:0 0 140px}}
+  @media (max-width:900px){.viewer.big{height:400px}}
+
+  /* PLANOS */
+  .planos{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  .plano{background:#fff;border:1px solid rgba(92,200,255,.35);border-radius:12px;padding:10px;transition:transform .3s}
+  .plano a{text-decoration:none;display:block}
+  .plano:hover{transform:scale(1.02)}
+  .plano svg,.plano img{width:100%;height:auto;display:block}
+  .plano figcaption{display:flex;justify-content:space-between;margin-top:10px;font-size:.9rem;color:#1b2535;padding:0 4px}
+  .plano figcaption .mono{color:#c2560a}
+
+  /* SKILLS */
+  .skills{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+  .skill{border:1px solid var(--border);border-radius:12px;padding:22px;background:rgba(17,28,47,.6)}
+  .skill .ico{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;background:rgba(255,122,26,.12);margin-bottom:14px}
+  .skill h4{font-size:1.05rem;margin-bottom:8px}
+  .skill ul{list-style:none;color:var(--muted);font-size:.92rem}
+  .skill li::before{content:'▸ ';color:var(--accent)}
+
+  /* CONTACT */
+  .contact{border:1px solid var(--border);border-radius:16px;padding:48px;background:linear-gradient(135deg,rgba(255,122,26,.10),rgba(92,200,255,.06));display:grid;grid-template-columns:1.3fr 1fr;gap:32px;align-items:center}
+  .contact h2{font-size:2rem;margin:8px 0 12px}
+  .contact p{color:var(--muted)}
+  .links{display:flex;flex-direction:column;gap:12px}
+  .links a{display:flex;justify-content:space-between;padding:14px 18px;border:1px solid var(--border);border-radius:10px;text-decoration:none;background:rgba(11,18,32,.6);transition:border-color .2s}
+  .links a:hover{border-color:var(--accent)}
+  .links small{color:var(--muted);font-family:var(--mono)}
+  footer{padding:36px 0;color:var(--muted);font-size:.85rem;text-align:center}
+
+  /* ANIMACIONES AL HACER SCROLL */
+  .js .reveal{opacity:0;transform:translateY(28px);transition:opacity .8s ease,transform .8s ease}
+  .js .reveal.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){.js .reveal{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}}
+
+  @media (max-width:1000px){.grid,.planos{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:900px){
+    .hero{grid-template-columns:1fr;min-height:auto}
+    .hero-3d{height:380px}
+    .grid,.planos{grid-template-columns:1fr}
+    .skills{grid-template-columns:repeat(2,1fr)}
+    .contact{grid-template-columns:1fr;padding:32px}
+    nav ul{gap:16px}
+  }
+  @media (max-width:560px){nav ul li:nth-child(n+3){display:none}.skills{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="logo" href="#inicio" aria-label="Bryan Quino Ponce — inicio"><img src="img/logo.svg" alt="" width="54" height="53"><b>BRYAN QUINO<br>PONCE<span>.</span></b></a>
+    <ul>
+      <li><a href="#proyectos">Proyectos</a></li>
+      <li><a href="#aplicados">Aplicados</a></li>
+      <li><a href="#ensamble">Ensambles</a></li>
+      <li><a href="#impresion">Impresión 3D</a></li>
+      <li><a href="#habilidades">Habilidades</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header id="inicio" class="wrap hero">
+  <div class="reveal">
+    <div class="mono">Ingeniería Mecatrónica · Lima, Perú</div>
+    <h1>Diseño piezas que <em>se pueden fabricar.</em></h1>
+    <p class="lead">Modelado 3D en Fusion 360 e Inventor, impresión 3D, planos técnicos y prototipos con ESP32.</p>
+    <div class="btns">
+      <a class="btn primary" href="#proyectos">Ver proyectos</a>
+      <a class="btn ghost" href="#contacto">Contáctame</a>
+    </div>
+    <div class="stats">
+      <div><b>Fusion 360 · Inventor</b><small>Diseño mecánico</small></div>
+      <div><b>Impresión 3D</b><small>Del CAD a la pieza</small></div>
+      <div><b>ESP32 · PLC</b><small>Electrónica y control</small></div>
+    </div>
+  </div>
+  <div class="hero-3d reveal" id="hero3d">
+    <i class="corner c1"></i><i class="corner c2"></i><i class="corner c3"></i><i class="corner c4"></i>
+    <div class="mono tag" id="heroTag">Crea aquí lo que tu mente pueda imaginar</div>
+  </div>
+</header>
+
+<section id="proyectos">
+  <div class="wrap">
+    <div class="head reveal">
+      <div class="mono">01 — Piezas</div>
+      <h2>Del plano a la pieza impresa</h2>
+      <p>Piezas que diseñé en Autodesk Inventor para una máquina de secado de barbotina. Pasa el mouse por cada etapa: a la izquierda el plano, al centro el modelo 3D (arrástralo para girarlo) y a la derecha la impresión real. En el celular, desliza hacia los lados.</p>
+    </div>
+    <div class="piezas" id="grid"></div>
+  </div>
+</section>
+
+<section id="aplicados">
+  <div class="wrap">
+    <div class="head reveal">
+      <div class="mono">02 — Proyectos aplicados</div>
+      <h2>Diseños en uso real</h2>
+      <p>Piezas que diseñé en Fusion 360 para una empresa y que hoy están instaladas y en uso, una de ellas en un colegio de Lima. Gira cada pieza en 360° y revisa las fotos: las que tienen lupa se pueden ampliar para ver los detalles.</p>
+    </div>
+    <div class="aps" id="aps"></div>
+  </div>
+</section>
+
+<section id="ensamble">
+  <div class="wrap">
+    <div class="head reveal">
+      <div class="mono">03 — Ensambles</div>
+      <h2>Ensambles en vista explosionada</h2>
+      <p>Tres subsistemas de la máquina de secado de barbotina. Elige uno, míralo separarse en sus piezas o mueve la barra para hacerlo tú.</p>
+    </div>
+    <p id="ensDesc" class="reveal"></p>
+    <div class="ens-wrap reveal">
+    <div class="thumbs" role="tablist" id="ensTabs" aria-label="Elegir ensamble"></div>
+    <div class="ens">
+      <div class="viewer big" id="ens3d"><span class="hint">⟲ arrastra para girar</span></div>
+      <div class="ens-ui">
+        <button id="btnExp" type="button">Explosionar</button>
+        <input type="range" id="slExp" min="0" max="100" value="0" aria-label="Separación de piezas">
+        <label><input type="checkbox" id="autoExp" checked> Animación automática</label>
+        <span class="mono" id="ensInfo"></span>
+      </div>
+    </div>
+    </div>
+  </div>
+</section>
+
+<section id="impresion">
+  <div class="wrap">
+    <div class="head reveal">
+      <div class="mono">04 — Impresión 3D</div>
+      <h2>Experiencia en impresión 3D</h2>
+      <p>Imprimo en una impresora de doble boquilla con cámara cerrada, lo que me permite trabajar con materiales técnicos como el ABS y hacer piezas de varios colores. Estos son algunos trabajos, grabados mientras se imprimían.</p>
+    </div>
+    <div class="mats reveal" id="mats"></div>
+    <p class="nota reveal">Temperaturas: rangos típicos de cada material; el valor exacto se ajusta según la marca del filamento y la pieza.</p>
+    <div class="imps" id="imps"></div>
+  </div>
+</section>
+
+<section id="habilidades">
+  <div class="wrap">
+    <div class="head reveal">
+      <div class="mono">05 — Habilidades</div>
+      <h2>Lo que sé hacer</h2>
+    </div>
+    <div class="skills">
+      <div class="skill reveal"><div class="ico">📐</div><h4>Diseño 3D</h4><ul><li>Fusion 360</li><li>Autodesk Inventor</li><li>Ensambles y piezas</li></ul></div>
+      <div class="skill reveal"><div class="ico">🖨️</div><h4>Impresión 3D</h4><ul><li>Diseño para FDM</li><li>Preparación de STL</li><li>Prototipos funcionales</li></ul></div>
+      <div class="skill reveal"><div class="ico">📄</div><h4>Planos</h4><ul><li>Dibujo mecánico</li><li>Vistas y cotas</li><li>Normas de dibujo</li></ul></div>
+      <div class="skill reveal"><div class="ico">⚡</div><h4>Electrónica</h4><ul><li>Programación ESP32</li><li>PLC (básico)</li><li>Procesamiento de imágenes</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section id="contacto">
+  <div class="wrap">
+    <div class="contact reveal">
+      <div>
+        <div class="mono">06 — Contacto</div>
+        <h2>¿Trabajamos juntos?</h2>
+        <p>Busco prácticas preprofesionales en diseño 3D, impresión 3D, diseño mecánico o automatización en Lima.</p>
+      </div>
+      <div class="links">
+        <!-- CAMBIA: pon tus datos reales -->
+        <a href="mailto:tu-correo@ejemplo.com">Correo <small>tu-correo@ejemplo.com</small></a>
+        <a href="https://www.linkedin.com/in/tu-usuario">LinkedIn <small>/in/tu-usuario</small></a>
+        <a href="https://github.com/bryandus17-rgb">GitHub <small>@bryandus17-rgb</small></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer><img src="img/logo.svg" alt="" width="40" height="39" style="vertical-align:middle;margin-right:6px">© 2026 Bryan Quino Ponce · Diseño mecánico e impresión 3D</footer>
+
+<script>
+// animación al hacer scroll (funciona aunque el 3D no cargue)
+(function(){
+  const rio = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); rio.unobserve(e.target); } }), { threshold: .12 });
+  window.observarReveal = () => document.querySelectorAll('.reveal:not(.in)').forEach(el => rio.observe(el));
+  observarReveal();
+})();
+</script>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+<script type="module">
+/* =====================================================================
+   TUS PROYECTOS — edita esta lista
+   - modelo: puede ser un modelo de ejemplo ('reductora', 'caja', 'soporte', 'jarron')
+             o la ruta a TU archivo: 'modelos/mi-pieza.stl' o 'modelos/mi-pieza.glb'
+             (exporta desde Fusion 360 / Inventor y súbelo a la carpeta "modelos" del repositorio)
+   - enlace: link a Printables, Thingiverse, GitHub, un PDF del plano, etc.
+   ===================================================================== */
+const PROYECTOS = [
+  { titulo: 'SujetadorA — brazo curvo',
+    descripcion: 'Brazo en arco (R158–R165) del sistema biaxial de la máquina de secado. Une el soporte con la rueda del eje Z y lleva alojamientos para tornillería. Se imprimió acostado, con soportes tipo árbol bajo el arco.',
+    modelo: 'modelos/sujetador-a.stl', plano: 'planos/sujetador-a', video: 'videos/sujetador-a',
+    specs: [['Material', 'PLA+'], ['Diseño', 'Autodesk Inventor'], ['Subsistema', 'Sistema biaxial'], ['Soportes', 'Tipo árbol']] },
+  { titulo: 'Base de giro Z',
+    descripcion: 'Anillo base de unos 160 mm que soporta el giro en el eje Z, con orejas de fijación y agujeros Ø5,3 para pernos.',
+    modelo: 'modelos/base-giro-z.stl', plano: 'planos/base-giro-z', video: 'videos/base-giro-z',
+    specs: [['Material', 'PLA+'], ['Diseño', 'Autodesk Inventor'], ['Subsistema', 'Sistema biaxial'], ['Tamaño', '≈160 mm']] },
+  { titulo: 'Sujetador de motor JGA25',
+    descripcion: 'Soporte del motorreductor JGA25-370 en el mecanismo de tornillo sin fin. Estructura aligerada con nervios en X para usar menos material sin perder forma.',
+    modelo: 'modelos/sujetador-motor-jga25.stl', plano: 'planos/sujetador-motor-jga25', video: 'videos/sujetador-motor-jga25',
+    specs: [['Material', 'PLA+'], ['Diseño', 'Autodesk Inventor'], ['Subsistema', 'Tornillo sin fin'], ['Motor', 'JGA25-370']] },
+];
+
+/* ---------- PROYECTOS APLICADOS — edita textos y fotos aquí ----------
+   giro: carpeta con 36 imágenes 360° (00.webp … 35.webp). media: tipo 'foto' | 'fusion' | 'video'. zoom: true solo en fotos nítidas y de buena resolución */
+const APLICADOS = [
+  { titulo: 'Panel frontal con iconografía integrada', sub: 'Diseño de señalización · Impresión 3D multimaterial',
+    giro: 'modelos/360/panel-iconografia',
+    textos: ['La empresa necesitaba que cada LED del panel indicara su función. Diseñé un ícono para cada uno (NFC, conexión, energía, encendido y llave), pensados para que cualquier persona entienda el estado del equipo sin leer un manual.',
+      'Los íconos se imprimen junto con la pieza, en un segundo material con la doble boquilla: sin pintura ni stickers, no se despegan ni se borran con el uso. En la parte posterior diseñé arandelas de sujeción (en rojo) que fijan el panel y facilitan su instalación en el equipo.'],
+    chips: ['Diseño de iconografía', 'Señalización', 'Sujeción de fácil instalación', 'Multimaterial', 'Fusion 360'],
+    media: [
+      { tipo: 'video', src: 'videos/panel-iconografia', titulo: 'Panel terminado: íconos impresos en blanco' },
+      { tipo: 'foto', src: 'fotos/panel-instalado', titulo: 'Panel instalado en el equipo' },
+      { tipo: 'foto', src: 'fotos/panel-reverso', titulo: 'Reverso con las arandelas de sujeción en rojo' },
+      { tipo: 'fusion', src: 'fotos/panel-fusion-1', titulo: 'Diseño en Fusion 360: íconos como cuerpos separados', zoom: true },
+      { tipo: 'fusion', src: 'fotos/panel-fusion-2', titulo: 'Diseño en Fusion 360: reverso y arandelas de sujeción', zoom: true }] },
+  { titulo: 'Soporte para llave térmica monopolar', sub: 'Diseño a medida · Montaje eléctrico',
+    giro: 'modelos/360/soporte-itm',
+    textos: ['La empresa necesitaba montar una llave térmica (ITM) monopolar en el equipo. Diseñé un soporte a medida que la mantiene firme en su lugar y la deja al alcance para accionarla.'],
+    chips: ['Diseño a medida', 'Protección eléctrica', 'Fusion 360'],
+    media: [
+      { tipo: 'foto', src: 'fotos/itm-instalado', titulo: 'Llave térmica montada con el soporte', zoom: true },
+      { tipo: 'fusion', src: 'fotos/itm-fusion', titulo: 'Diseño del soporte en Fusion 360', zoom: true }] },
+  { titulo: 'Organizador de cables para coche portalaptops', sub: 'Gestión de cables · Uso escolar diario',
+    lugar: 'Instalado en el Colegio Nuestra Señora del Consuelo · Lima',
+    giro: 'modelos/360/regleta-cables',
+    textos: ['Regleta para ordenar los cables de carga de un coche portalaptops. Cada laptop tiene su posición numerada y su cable sujeto, así se conectan en orden y los cables no se enredan con el uso diario.'],
+    chips: ['En uso en un colegio', 'Gestión de cables', 'Fusion 360'],
+    media: [
+      { tipo: 'foto', src: 'fotos/regleta-instalada', titulo: 'Regleta instalada en el coche, con las posiciones numeradas', zoom: true },
+      { tipo: 'video', src: 'videos/regleta-cables', titulo: 'Coche portalaptops con los cables ordenados' },
+      { tipo: 'fusion', src: 'fotos/regleta-fusion', titulo: 'Diseño de la regleta en Fusion 360', zoom: true }] },
+  { titulo: 'Sujetador para módulo Sonoff y guía de soldadura', sub: 'Domótica · Diseño de utillaje',
+    giro: 'modelos/360/sujetador-sonoff',
+    textos: ['La empresa pidió un sujetador para montar un Sonoff, un módulo de domótica (relé inteligente controlado por Wi-Fi). Diseñé la carcasa que lo sujeta y, como pieza aparte, una guía de soldadura: una plantilla que ubica los pernos para soldarlos en la posición exacta donde encaja el sujetador.'],
+    chips: ['Domótica', 'Guía de soldadura', 'Utillaje', 'Fusion 360'],
+    media: [
+      { tipo: 'foto', src: 'fotos/sonoff-foto', titulo: 'Módulo Sonoff dentro de su sujetador', zoom: true },
+      { tipo: 'fusion', src: 'fotos/sonoff-fusion', titulo: 'Diseño en Fusion 360: sujetador y guía de soldadura', zoom: true }] },
+];
+
+/* ---------- EXPERIENCIA EN IMPRESIÓN 3D — edita textos aquí ---------- */
+const MATERIALES = [
+  { nombre: 'PLA+', color: '#d8be82', boquilla: '205–230 °C', cama: '55–65 °C',
+    texto: 'Preciso y estable, casi no se deforma. Ideal para piezas mecánicas de interior; empieza a ablandarse cerca de los 60 °C.' },
+  { nombre: 'PETG', color: '#9fd6e8', boquilla: '230–250 °C', cama: '70–85 °C',
+    texto: 'Más tenaz y resistente a la humedad que el PLA. Hay que bajar el ventilador y ajustar la retracción para evitar hilos.' },
+  { nombre: 'ABS', color: '#ff7a1a', boquilla: '240–260 °C', cama: '95–110 °C',
+    texto: 'Resiste calor y golpes. Necesita cámara cerrada y cama caliente para no deformarse, y filtro por los vapores que libera.' },
+];
+const IMPRESIONES = [
+  { titulo: 'Proyecto Ardilla: figura multicolor en tres partes', video: 'videos/proyecto-ardilla', material: 'Multicolor', grande: true,
+    texto: 'Cabeza, cuerpo y cola se imprimieron por separado y luego se ensamblaron. Ninguna parte fue pintada: cada color sale directamente de la impresora, asignado digitalmente a cada zona del modelo antes de imprimir. Para la cabeza elegí una altura de capa de 0,16 mm (alta calidad), para que las curvas y los detalles del rostro salieran definidos: 27 horas de impresión solo para esa parte.',
+    chips: ['Sin pintura', 'Color digital', 'Capa 0,16 mm', 'Cabeza: 27 h'] },
+  { titulo: 'Ducto de aire en ABS', video: 'videos/ducto-abs', material: 'ABS', grande: true,
+    texto: 'El ABS se contrae al enfriarse: si el aire de la habitación lo enfría de golpe, la pieza se levanta de la cama (warping) y se agrieta entre capas. Por eso se imprimió en cámara cerrada, con cama calefactada y con filtro para los vapores. Se tomaron las medidas del equipo real y el ducto encajó a la perfección.',
+    chips: ['Cámara cerrada', 'Cama calefactada', 'Filtro de vapores', 'Encaje a medida'] },
+  { titulo: 'Letreros de señalización multicolor', video: 'videos/letreros-multicolor', material: 'Multicolor',
+    texto: 'Con la impresora de doble boquilla, cada color sale de su propia boquilla: los letreros salen en dos colores en una sola impresión, sin cambiar el filamento a mano y con menos material de purga.',
+    chips: ['Doble boquilla', 'Dos colores'] },
+  { titulo: 'Sujetador de tubos cuadrados para exterior', video: 'videos/sujetador-tubos-abs', material: 'ABS',
+    texto: 'Pieza para uso en exteriores. Se eligió ABS porque soporta el calor del sol y los golpes mucho mejor que el PLA, que empieza a deformarse cerca de los 60 °C.',
+    chips: ['Exterior', 'Resiste el calor'] },
+  { titulo: 'Varias piezas en una sola impresión', video: 'videos/piezas-petg', material: 'PETG',
+    texto: 'Producción en lote: muchas piezas pequeñas en una sola cama, en PETG por su tenacidad. Con buena adherencia y ajuste de retracción, todas salen iguales.',
+    chips: ['Producción en lote', 'PETG'] },
+];
+
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { STLLoader } from 'three/addons/loaders/STLLoader.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const C = { accent: 0xff7a1a, cyan: 0x5cc8ff, steel: 0x8fa0b6, dark: 0x3a4a63, pcb: 0x1f6f4a };
+
+const mat = (color, o = {}) => new THREE.MeshStandardMaterial({ color, metalness: .3, roughness: .5, ...o });
+function edges(mesh, color = C.cyan, opacity = .35) {
+  mesh.add(new THREE.LineSegments(new THREE.EdgesGeometry(mesh.geometry, 25),
+    new THREE.LineBasicMaterial({ color, transparent: true, opacity })));
+  return mesh;
+}
+
+/* ---------- Engranajes ---------- */
+function gearGeometry(z, m, depth, holeR) {
+  const r = m * z / 2, ro = r + m, rr = r - 1.25 * m, step = Math.PI * 2 / z;
+  const s = new THREE.Shape();
+  for (let i = 0; i < z; i++) {
+    const a = i * step;
+    [[rr, a - .42 * step], [ro, a - .17 * step], [ro, a + .17 * step], [rr, a + .42 * step]].forEach(([R, t], j) => {
+      const x = R * Math.cos(t), y = R * Math.sin(t);
+      (i === 0 && j === 0) ? s.moveTo(x, y) : s.lineTo(x, y);
+    });
+  }
+  s.closePath();
+  const h = new THREE.Path(); h.absarc(0, 0, holeR, 0, Math.PI * 2, true); s.holes.push(h);
+  if (z >= 20) { // agujeros de aligeramiento
+    const rc = (holeR + rr) / 2, rh = (rr - holeR) * .26;
+    for (let k = 0; k < 5; k++) {
+      const a = k * Math.PI * 2 / 5, p = new THREE.Path();
+      p.absarc(rc * Math.cos(a), rc * Math.sin(a), rh, 0, Math.PI * 2, true); s.holes.push(p);
+    }
+  }
+  const g = new THREE.ExtrudeGeometry(s, { depth, bevelEnabled: true, bevelThickness: depth * .06, bevelSize: m * .08, bevelSegments: 1, curveSegments: 20 });
+  g.translate(0, 0, -depth / 2);
+  return g;
+}
+function makeGear(z, m, depth, color) {
+  const holeR = Math.max(m * z * .07, m * 1.1);
+  const mesh = edges(new THREE.Mesh(gearGeometry(z, m, depth, holeR), mat(color)));
+  const shaft = new THREE.Mesh(new THREE.CylinderGeometry(holeR * .95, holeR * .95, depth * 2.4, 20), mat(C.dark, { metalness: .7, roughness: .3 }));
+  shaft.rotation.x = Math.PI / 2; mesh.add(shaft);
+  return mesh;
+}
+// defs[0] va en el centro; los demás engranan con él. k = posición en "dientes" alrededor del primero
+function gearTrain(defs, m, depth, speed = .6) {
+  const group = new THREE.Group(), z0 = defs[0].z, step0 = Math.PI * 2 / z0, gears = [];
+  defs.forEach((d, i) => {
+    const mesh = makeGear(d.z, m, depth, d.color);
+    if (i === 0) gears.push({ mesh, off: step0 / 2, ratio: 1 });
+    else {
+      const phi = d.k * step0, dist = m * (z0 + d.z) / 2;
+      mesh.position.set(dist * Math.cos(phi), dist * Math.sin(phi), 0);
+      gears.push({ mesh, off: phi + Math.PI, ratio: -z0 / d.z });
+    }
+    group.add(mesh);
+  });
+  const update = t => gears.forEach(g => g.mesh.rotation.z = g.off + t * speed * g.ratio);
+  update(0);
+  return { object: group, update };
+}
+
+/* ---------- Otros modelos de ejemplo ---------- */
+function roundedRect(path, w, h, r) {
+  const x = -w / 2, y = -h / 2;
+  path.moveTo(x + r, y); path.lineTo(x + w - r, y); path.quadraticCurveTo(x + w, y, x + w, y + r);
+  path.lineTo(x + w, y + h - r); path.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  path.lineTo(x + r, y + h); path.quadraticCurveTo(x, y + h, x, y + h - r);
+  path.lineTo(x, y + r); path.quadraticCurveTo(x, y, x + r, y);
+  return path;
+}
+const MODELOS = {
+  reductora: () => gearTrain([{ z: 24, color: C.steel }, { z: 12, k: 0, color: C.accent }], .1, .3, .8),
+
+  caja: () => {
+    const W = 2.4, H = 1.6, r = .18, wall = .08, hgt = .6, g = new THREE.Group();
+    const ring = roundedRect(new THREE.Shape(), W, H, r);
+    ring.holes.push(roundedRect(new THREE.Path(), W - wall * 2, H - wall * 2, r - wall));
+    g.add(edges(new THREE.Mesh(new THREE.ExtrudeGeometry(ring, { depth: hgt, bevelEnabled: false }), mat(C.steel))));
+    g.add(edges(new THREE.Mesh(new THREE.ExtrudeGeometry(roundedRect(new THREE.Shape(), W, H, r), { depth: .08, bevelEnabled: false }), mat(C.steel))));
+    [[-1, -1], [1, -1], [1, 1], [-1, 1]].forEach(([sx, sy]) => {
+      const p = new THREE.Mesh(new THREE.CylinderGeometry(.07, .07, .22, 16), mat(C.dark));
+      p.rotation.x = Math.PI / 2; p.position.set(sx * .85, sy * .5, .19); g.add(p);
+    });
+    const pcb = edges(new THREE.Mesh(new THREE.BoxGeometry(1.9, 1.15, .04), mat(C.pcb)), 0x9effc8, .4);
+    pcb.position.z = .32; g.add(pcb);
+    const chip = new THREE.Mesh(new THREE.BoxGeometry(.7, .5, .08), mat(0xc0c8d4, { metalness: .8, roughness: .25 }));
+    chip.position.set(.35, 0, .38); g.add(chip);
+    const lid = edges(new THREE.Mesh(new THREE.ExtrudeGeometry(roundedRect(new THREE.Shape(), W, H, r), { depth: .07, bevelEnabled: false }), mat(C.accent, { transparent: true, opacity: .85 })));
+    g.add(lid);
+    g.rotation.x = -Math.PI / 2;
+    return { object: g, update: t => lid.position.z = hgt + .35 + .25 * Math.sin(t * 1.2) };
+  },
+
+  soporte: () => {
+    const g = new THREE.Group(), T = .14, m = mat(C.accent);
+    const plate = new THREE.Shape(); plate.moveTo(-1, -.6); plate.lineTo(1, -.6); plate.lineTo(1, .6); plate.lineTo(-1, .6); plate.closePath();
+    [-.55, .55].forEach(x => { const p = new THREE.Path(); p.absarc(x, 0, .12, 0, Math.PI * 2, true); plate.holes.push(p); });
+    const geo = new THREE.ExtrudeGeometry(plate, { depth: T, bevelEnabled: false, curveSegments: 20 });
+    g.add(edges(new THREE.Mesh(geo, m)));
+    const vert = edges(new THREE.Mesh(geo, m)); vert.rotation.x = Math.PI / 2; vert.position.set(0, -.6 + T, .6); g.add(vert);
+    const tri = new THREE.Shape(); tri.moveTo(0, 0); tri.lineTo(.85, 0); tri.lineTo(0, .85); tri.closePath();
+    const tg = new THREE.ExtrudeGeometry(tri, { depth: .1, bevelEnabled: false });
+    tg.applyMatrix4(new THREE.Matrix4().makeBasis(new THREE.Vector3(0, 1, 0), new THREE.Vector3(0, 0, 1), new THREE.Vector3(1, 0, 0)));
+    [-.9, .8].forEach(x => { const gs = edges(new THREE.Mesh(tg, m)); gs.position.set(x, -.6 + T, T); g.add(gs); });
+    [-.55, .55].forEach(x => {
+      const b = new THREE.Mesh(new THREE.CylinderGeometry(.1, .1, .5, 16), mat(C.dark, { metalness: .8, roughness: .3 }));
+      b.rotation.x = Math.PI / 2; b.position.set(x, 0, .1); g.add(b);
+      const head = new THREE.Mesh(new THREE.CylinderGeometry(.18, .18, .08, 6), b.material);
+      head.rotation.x = Math.PI / 2; head.position.set(x, 0, .36); g.add(head);
+    });
+    g.rotation.x = -Math.PI / 2;
+    return { object: g };
+  },
+
+  jarron: () => {
+    const pts = [];
+    for (let i = 0; i <= 24; i++) { const y = i / 24 * 2.2; pts.push(new THREE.Vector2(i === 0 ? 0 : .5 + .28 * Math.sin(y * 2.1 + .3) + .08 * y, y)); }
+    const geo = new THREE.LatheGeometry(pts, 12), pos = geo.attributes.position;
+    for (let i = 0; i < pos.count; i++) { // giro helicoidal
+      const x = pos.getX(i), y = pos.getY(i), z = pos.getZ(i), a = y * .7;
+      pos.setXYZ(i, x * Math.cos(a) - z * Math.sin(a), y, x * Math.sin(a) + z * Math.cos(a));
+    }
+    geo.computeVertexNormals();
+    return { object: edges(new THREE.Mesh(geo, mat(C.accent, { flatShading: true, side: THREE.DoubleSide })), 0xffd2b0, .3) };
+  },
+};
+
+async function cargarGLB(url, color) {
+  const gltf = await new GLTFLoader().loadAsync(url);
+  gltf.scene.traverse(o => {
+    if (!o.isMesh) return;
+    const m = o.material.clone(); if (color != null) m.color.setHex(color);
+    m.metalness = .05; m.roughness = .6; m.side = THREE.DoubleSide; o.material = m;
+  });
+  return { object: gltf.scene };
+}
+async function cargarArchivo(url) {
+  if (/\.stl$/i.test(url)) {
+    const geo = await new STLLoader().loadAsync(url); geo.computeVertexNormals();
+    const mesh = edges(new THREE.Mesh(geo, mat(0xd8be82, { metalness: .05, roughness: .6 })), 0x6b5730, .45); mesh.rotation.x = -Math.PI / 2; // STL viene con Z arriba
+    return { object: mesh };
+  }
+  const gltf = await new GLTFLoader().loadAsync(url);
+  return { object: gltf.scene };
+}
+
+/* ---------- Ensamble con vista explosionada ---------- */
+async function cargarEnsamble(url, cuanto = .9) {
+  const gltf = await new GLTFLoader().loadAsync(url);
+  const root = gltf.scene; root.updateMatrixWorld(true);
+  const C = new THREE.Box3().setFromObject(root).getCenter(new THREE.Vector3());
+  const piezas = [];
+  root.traverse(o => {
+    if (!o.isMesh) return;
+    o.material = o.material.clone(); o.material.metalness = .15; o.material.roughness = .55;
+    const c = new THREE.Box3().setFromObject(o).getCenter(new THREE.Vector3());
+    const destino = c.clone().add(c.clone().sub(C).multiplyScalar(cuanto));
+    const off = o.parent.worldToLocal(destino.clone()).sub(o.parent.worldToLocal(c.clone()));
+    piezas.push({ o, base: o.position.clone(), off });
+  });
+  const st = { e: 0, target: 0, auto: !reduced, timer: 0, last: performance.now(), onChange: null };
+  const ease = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+  const update = () => {
+    const now = performance.now(), dt = Math.min(.05, (now - st.last) / 1000); st.last = now;
+    if (st.auto) { st.timer += dt; if (st.timer > 3.5) { st.timer = 0; st.target = st.target ? 0 : 1; } }
+    const prev = st.e;
+    st.e += Math.sign(st.target - st.e) * Math.min(Math.abs(st.target - st.e), dt * .7);
+    if (st.e !== prev || !st.ready) { const k = ease(st.e); piezas.forEach(p => p.o.position.copy(p.base).addScaledVector(p.off, k)); st.ready = true; st.onChange?.(st); }
+  };
+  return { object: root, update, st, n: piezas.length };
+}
+
+/* ---------- Visor 3D ---------- */
+const viewers = [];
+// Cada visor usa WebGL solo mientras está en pantalla: los celulares permiten pocos contextos 3D a la vez
+const io = new IntersectionObserver(es => es.forEach(e => e.target._viewer?.setVisible(e.isIntersecting)), { rootMargin: '150px' });
+
+class Viewer {
+  constructor(el, { autoRotate = true, speed = 1.4, tilt = null, fit = 1 } = {}) {
+    this.el = el; this.visible = false; this.tilt = tilt; this.fit = fit;
+    this.opts = { enableDamping: true, enablePan: false, enableZoom: false, autoRotate: autoRotate && !reduced, autoRotateSpeed: speed };
+    this.scene = new THREE.Scene();
+    this.camera = new THREE.PerspectiveCamera(35, 1, .01, 200);
+    // Luz pareja desde cualquier ángulo: ambiente + cielo/suelo claros + una luz que sigue a la cámara
+    this.scene.add(new THREE.AmbientLight(0xffffff, .55));
+    this.scene.add(new THREE.HemisphereLight(0xe6f0ff, 0x8a94a8, 1.3));
+    const key = new THREE.DirectionalLight(0xffffff, 1.3); key.position.set(3, 5, 4); this.scene.add(key);
+    const rim = new THREE.DirectionalLight(C.cyan, .5); rim.position.set(-4, 2, -3); this.scene.add(rim);
+    this.head = new THREE.DirectionalLight(0xffffff, 1.4); this.scene.add(this.head);
+    new ResizeObserver(() => this.resize()).observe(el);
+    el._viewer = this; io.observe(el); viewers.push(this);
+  }
+  activar() {
+    if (this.renderer || this.sinWebGL) return;
+    try { this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true }); }
+    catch (e) { this.sinWebGL = true; this.el.classList.add('no-webgl'); return; }
+    this.renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5)); // ligero para PCs y celulares modestos
+    const cv = this.renderer.domElement; this.el.prepend(cv);
+    cv.addEventListener('webglcontextlost', () => setTimeout(() => { this.liberar(); if (this.visible) this.activar(); }, 300));
+    this.controls = new OrbitControls(this.camera, cv); Object.assign(this.controls, this.opts);
+    this.resize();
+  }
+  liberar() {
+    if (!this.renderer) return;
+    this.controls.dispose(); this.renderer.dispose(); this.renderer.forceContextLoss?.();
+    this.renderer.domElement.remove(); this.renderer = this.controls = null;
+  }
+  setVisible(v) {
+    this.visible = v; clearTimeout(this.tLib);
+    if (v) this.activar(); else this.tLib = setTimeout(() => !this.visible && this.liberar(), 2500);
+  }
+  set({ object, update }) {
+    const wrap = new THREE.Group(); wrap.add(object);
+    if (this.tilt) wrap.rotation.set(...this.tilt);
+    wrap.updateMatrixWorld(true);
+    const box = new THREE.Box3().setFromObject(wrap), c = box.getCenter(new THREE.Vector3()), r = box.getBoundingSphere(new THREE.Sphere()).radius;
+    const holder = new THREE.Group(); wrap.position.sub(c); holder.add(wrap);
+    if (this.holder) this.scene.remove(this.holder);
+    this.holder = holder; this.scene.add(holder);
+    const d = r / Math.sin(THREE.MathUtils.degToRad(this.camera.fov / 2)) * 1.05 * this.fit;
+    this.camera.position.copy(new THREE.Vector3(1, .75, 1.1).normalize().multiplyScalar(d));
+    this.camera.lookAt(0, 0, 0); this.controls?.target.set(0, 0, 0);
+    this.camera.near = d / 50; this.camera.far = d * 10; this.camera.updateProjectionMatrix();
+    this.update = update; this.resize();
+  }
+  resize() {
+    const w = this.el.clientWidth, h = this.el.clientHeight;
+    if (!w || !h) return;
+    this.camera.aspect = w / h; this.camera.updateProjectionMatrix();
+    if (!this.renderer) return;
+    this.renderer.setSize(w, h, false); const c = this.renderer.domElement; c.style.width = w + 'px'; c.style.height = h + 'px';
+  }
+  render(t) {
+    if (!this.visible || !this.renderer) return;
+    this.controls.update(); this.update?.(t);
+    this.head.position.copy(this.camera.position);
+    this.renderer.render(this.scene, this.camera);
+  }
+}
+
+/* ---------- Vista 360° por imágenes (piezas de empresa: no se publica el archivo 3D) ---------- */
+function giro360(el, carpeta, n = 36) {
+  const img = document.createElement('img'); img.alt = 'Vista 360° de la pieza'; img.draggable = false;
+  img.className = 'giro'; el.appendChild(img);
+  const frames = []; let i = 0, cargado = false, visible = false, arrastrando = false, x0 = 0, i0 = 0, ultimo = 0, quieto = 0;
+  const src = k => `${carpeta}/${String(k).padStart(2, '0')}.webp`;
+  img.src = src(0);
+  const cargar = () => { if (cargado) return; cargado = true; for (let k = 0; k < n; k++) { const im = new Image(); im.src = src(k); frames[k] = im; } };
+  const ver = k => { i = ((k % n) + n) % n; const f = frames[i]; img.src = f && f.complete ? f.src : src(i); };
+  new IntersectionObserver(es => es.forEach(e => { visible = e.isIntersecting; if (visible) cargar(); }), { rootMargin: '300px' }).observe(el);
+  el.addEventListener('pointerdown', e => { arrastrando = true; x0 = e.clientX; i0 = i; el.setPointerCapture(e.pointerId); el.classList.add('drag'); });
+  el.addEventListener('pointermove', e => { if (!arrastrando) return; ver(i0 - Math.round((e.clientX - x0) / Math.max(6, el.clientWidth / n / 1.2))); });
+  const soltar = () => { arrastrando = false; quieto = performance.now(); el.classList.remove('drag'); };
+  el.addEventListener('pointerup', soltar); el.addEventListener('pointercancel', soltar);
+  el.addEventListener('contextmenu', e => e.preventDefault());
+  const loop = t => { if (visible && !arrastrando && !reduced && t - quieto > 2500 && t - ultimo > 110) { ultimo = t; ver(i + 1); } requestAnimationFrame(loop); };
+  requestAnimationFrame(loop);
+}
+
+/* ---------- Construir la página ---------- */
+/* ---------- Máquina de la portada: se arma al pasar el mouse y enciende un foco ---------- */
+function maquina() {
+  const root = new THREE.Group(), partes = [];
+  const steel = mat(0x9aa7b8, { metalness: .6, roughness: .35 }), dark = mat(0x2b3546, { metalness: .5, roughness: .4 });
+  const copper = mat(0xc8763a, { metalness: .7, roughness: .3 }), black = mat(0x1a1f29, { metalness: .2, roughness: .6 });
+  const holder = (obj, pos, dir) => {
+    const h = new THREE.Group(); h.position.copy(pos); h.add(obj); root.add(h);
+    partes.push({ h, p0: pos.clone(), dir: new THREE.Vector3(...dir), rot: new THREE.Euler((Math.random() - .5) * 2, (Math.random() - .5) * 2, (Math.random() - .5) * 2), delay: partes.length });
+    return h;
+  };
+  const V = (x, y, z = 0) => new THREE.Vector3(x, y, z);
+  const m = .12, z1 = 24, z2 = 12, z3 = 16, step1 = Math.PI * 2 / z1;
+  const P1 = V(0, 0), P2 = V(m * (z1 + z2) / 2, 0), phi3 = 9 * step1, d3 = m * (z1 + z3) / 2, P3 = V(d3 * Math.cos(phi3), d3 * Math.sin(phi3));
+  const A = V(-3.0, -1.9), zc = -.45;   // motor y cadena
+
+  // Base
+  const base = new THREE.Mesh(new THREE.BoxGeometry(9.6, .22, 3.4), mat(0x1b2535, { metalness: .3, roughness: .7 }));
+  holder(edges(base, C.cyan, .25), V(-.4, -3.05, -.4), [0, -2.5, 0]);
+
+  // Engranaje grande + catarina trasera (giran juntos)
+  const g1 = new THREE.Group(); g1.add(makeGear(z1, m, .35, C.steel));
+  const cat2 = edges(new THREE.Mesh(gearGeometry(18, .066, .12, .12), dark), C.cyan, .3); cat2.position.z = zc; g1.add(cat2);
+  holder(g1, P1, [0, 0, 3]);
+  const g2 = makeGear(z2, m, .35, C.accent); holder(g2, P2, [3, -.5, 1.5]);
+  const g3 = new THREE.Group(); g3.add(makeGear(z3, m, .35, 0x5c6b82));
+  const dinamo = new THREE.Mesh(new THREE.CylinderGeometry(.42, .42, .9, 24), mat(0x3f6e9e, { metalness: .5, roughness: .35 }));
+  dinamo.rotation.x = Math.PI / 2; dinamo.position.z = -.75; g3.add(edges(dinamo, C.cyan, .3));
+  holder(g3, P3, [-1, 2.5, 1]);
+
+  // Motor
+  const motor = new THREE.Group();
+  const cuerpo = new THREE.Mesh(new THREE.CylinderGeometry(.6, .6, 1.5, 32), steel); cuerpo.rotation.x = Math.PI / 2; cuerpo.position.z = -1.35;
+  const banda = new THREE.Mesh(new THREE.CylinderGeometry(.62, .62, .25, 32), mat(C.accent)); banda.rotation.x = Math.PI / 2; banda.position.z = -1.1;
+  const tapa = new THREE.Mesh(new THREE.CylinderGeometry(.45, .45, .15, 24), dark); tapa.rotation.x = Math.PI / 2; tapa.position.z = -.55;
+  const eje = new THREE.Mesh(new THREE.CylinderGeometry(.06, .06, .5, 12), steel); eje.rotation.x = Math.PI / 2; eje.position.z = -.4;
+  const pata = new THREE.Mesh(new THREE.BoxGeometry(1.1, .55, 1.3), dark); pata.position.set(0, -.6, -1.35);
+  [cuerpo, banda, tapa, eje, pata].forEach(o => motor.add(edges(o, C.cyan, .25)));
+  const cat1 = edges(new THREE.Mesh(gearGeometry(10, .066, .12, .05), dark), C.cyan, .3); cat1.position.z = zc; motor.add(cat1);
+  holder(motor, A, [-2.5, -.5, -1]);
+
+  // Cadena entre las dos catarinas
+  const r1 = .36, r2 = .62, D = V(-A.x, -A.y), d = D.length(), al = Math.atan2(D.y, D.x), ga = Math.acos((r1 - r2) / d);
+  const segs = [];
+  const arc = (c, r, a0, a1) => segs.push({ t: 'a', c, r, a0, a1, L: r * Math.abs(a1 - a0) });
+  const lin = (p, q) => segs.push({ t: 'l', p, q, L: p.distanceTo(q) });
+  const on = (c, r, a) => V(c.x + r * Math.cos(a), c.y + r * Math.sin(a));
+  arc(A, r1, al + ga, al - ga + Math.PI * 2);
+  lin(on(A, r1, al - ga), on(P1, r2, al - ga));
+  arc(P1, r2, al - ga, al + ga);
+  lin(on(P1, r2, al + ga), on(A, r1, al + ga));
+  const Ltot = segs.reduce((s, g) => s + g.L, 0);
+  const punto = s => {
+    s = ((s % Ltot) + Ltot) % Ltot;
+    for (const g of segs) { if (s <= g.L) return g.t === 'a' ? on(g.c, g.r, g.a0 + (g.a1 - g.a0) * s / g.L) : g.p.clone().lerp(g.q, s / g.L); s -= g.L; }
+    return segs[0].c.clone();
+  };
+  const nL = Math.floor(Ltot / .14);
+  const eslabones = new THREE.InstancedMesh(new THREE.BoxGeometry(.12, .06, .12), mat(0x8a96a8, { metalness: .7, roughness: .3 }), nL);
+  const cadena = new THREE.Group(); cadena.add(eslabones); cadena.position.z = zc;
+  holder(cadena, V(0, 0, 0), [0, -1, 2.5]);
+  const dummy = new THREE.Object3D();
+  const moverCadena = off => {
+    for (let i = 0; i < nL; i++) {
+      const s = i * Ltot / nL + off, p = punto(s), q = punto(s + .02);
+      dummy.position.set(p.x, p.y, 0); dummy.rotation.set(0, 0, Math.atan2(q.y - p.y, q.x - p.x)); dummy.updateMatrix();
+      eslabones.setMatrixAt(i, dummy.matrix);
+    }
+    eslabones.instanceMatrix.needsUpdate = true;
+  };
+
+  // Biela, pistón, cilindro y muelle sobre el engranaje naranja
+  const rc = .34, Lb = 1.6, zf = .32;
+  const manivela = new THREE.Group();
+  const disco = new THREE.Mesh(new THREE.CylinderGeometry(.46, .46, .1, 28), dark); disco.rotation.x = Math.PI / 2; disco.position.z = zf;
+  const perno = new THREE.Mesh(new THREE.CylinderGeometry(.06, .06, .3, 12), steel); perno.rotation.x = Math.PI / 2; perno.position.set(rc, 0, zf + .1);
+  manivela.add(edges(disco, C.cyan, .3), perno); holder(manivela, P2, [3.5, -1, 2]);
+  const biela = new THREE.Mesh(new THREE.BoxGeometry(1, .12, .08), steel); const bielaH = holder(biela, V(0, 0, 0), [3, 1, 3]);
+  const piston = new THREE.Group();
+  const cabeza = new THREE.Mesh(new THREE.CylinderGeometry(.3, .3, .34, 24), mat(0xd8be82, { metalness: .2, roughness: .5 })); piston.add(edges(cabeza, 0x6b5730, .5));
+  const pistonH = holder(piston, V(P2.x, 1.6, zf), [2.5, 3, 1]);
+  const camisa = new THREE.Mesh(new THREE.CylinderGeometry(.36, .36, 1.7, 28, 1, true), new THREE.MeshStandardMaterial({ color: 0x9fd6e8, transparent: true, opacity: .18, side: THREE.DoubleSide, metalness: .1, roughness: .1 }));
+  holder(camisa, V(P2.x, 1.75, zf), [4, 2, -1]);
+  const topeY = 3.05, tope = new THREE.Mesh(new THREE.BoxGeometry(1.1, .16, .8), dark); holder(edges(tope, C.cyan, .3), V(P2.x, topeY, zf), [2, 4, 0]);
+  const hel = []; for (let i = 0; i <= 160; i++) { const a = i / 160 * Math.PI * 2 * 7; hel.push(V(.2 * Math.cos(a), i / 160, .2 * Math.sin(a))); }
+  const muelle = new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(hel), 320, .025, 6), mat(0xc0c8d4, { metalness: .8, roughness: .25 }));
+  const muelleH = holder(muelle, V(P2.x, 2, zf), [5, 3.5, 1]);
+
+  // Foco con soporte y cables desde el dinamo
+  const B = V(-4.5, 2.15);
+  const foco = new THREE.Group();
+  const poste = new THREE.Mesh(new THREE.CylinderGeometry(.05, .05, 4.6, 10), dark); poste.position.y = -2.85;
+  const socket = new THREE.Mesh(new THREE.CylinderGeometry(.2, .24, .4, 20), dark); socket.position.y = -.42;
+  const vidrioM = new THREE.MeshStandardMaterial({ color: 0xfff6dd, emissive: 0xffb54d, emissiveIntensity: 0, transparent: true, opacity: .45, roughness: .1 });
+  const vidrio = new THREE.Mesh(new THREE.SphereGeometry(.45, 32, 24), vidrioM);
+  const filM = new THREE.MeshStandardMaterial({ color: 0x553311, emissive: 0xff8a1a, emissiveIntensity: 0 });
+  const filamento = new THREE.Mesh(new THREE.TorusGeometry(.11, .015, 6, 20), filM); filamento.position.y = -.05;
+  const luz = new THREE.PointLight(0xffc36b, 0, 14, 2);
+  const cv = document.createElement('canvas'); cv.width = cv.height = 128; const cx = cv.getContext('2d');
+  const gr = cx.createRadialGradient(64, 64, 0, 64, 64, 64); gr.addColorStop(0, 'rgba(255,214,140,1)'); gr.addColorStop(.35, 'rgba(255,170,70,.35)'); gr.addColorStop(1, 'rgba(255,150,40,0)');
+  cx.fillStyle = gr; cx.fillRect(0, 0, 128, 128);
+  const halo = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(cv), blending: THREE.AdditiveBlending, depthWrite: false, transparent: true, opacity: 0 }));
+  halo.scale.setScalar(3);
+  foco.add(edges(poste, C.cyan, .2), edges(socket, C.cyan, .3), vidrio, filamento, luz, halo);
+  holder(foco, B, [-2, 3, 1.5]);
+  const cable = (dz, col) => new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3([
+    V(P3.x - .2, P3.y + .25, -1.2 + dz), V(P3.x - .9, P3.y + 1.1, -1.1 + dz), V(-3.6, 2.2, -.5 + dz), V(B.x + .15, B.y - .6, dz * .5)]), 40, .03, 6), mat(col));
+  const cables = new THREE.Group(); cables.add(cable(0, 0xc0392b), cable(.12, 0x222831));
+  holder(cables, V(0, 0, 0), [-1, 3.5, -1]);
+
+  // Estado y animación
+  const st = { a: 0, sp: 0, target: 0, th: 0, last: performance.now(), t: 0 };
+  const ease = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+  const N = partes.length;
+  const g1in = g1, g2in = g2, g3in = g3;
+  const off1 = step1 / 2, off2 = Math.PI, off3 = phi3 + Math.PI;
+  const update = () => {
+    const now = performance.now(), dt = Math.min(.05, (now - st.last) / 1000); st.last = now; st.t += dt;
+    if (st.target) { st.a = Math.min(1, st.a + dt * .55); if (st.a >= 1) st.sp = Math.min(1, st.sp + dt * .8); }
+    else { st.sp = Math.max(0, st.sp - dt * 1.4); if (st.sp <= 0) st.a = Math.max(0, st.a - dt * .7); }
+    st.th += dt * st.sp * 7;
+    // mecánica (en coordenadas armadas)
+    const thM = st.th, th1 = thM * 10 / 18, th2 = -th1 * z1 / z2, th3 = -th1 * z1 / z3;
+    cat1.rotation.z = thM; g1in.rotation.z = off1 + th1; g2in.rotation.z = off2 + th2; g3in.rotation.z = off3 + th3;
+    moverCadena(thM * r1);
+    manivela.rotation.z = th2;
+    const pin = V(P2.x + rc * Math.cos(th2), P2.y + rc * Math.sin(th2));
+    const py = P2.y + rc * Math.sin(th2) + Math.sqrt(Lb * Lb - Math.pow(rc * Math.cos(th2), 2));
+    const pp = V(P2.x, py - .17);
+    biela.position.set((pin.x + pp.x) / 2, (pin.y + pp.y) / 2, zf + .12); biela.scale.x = pin.distanceTo(pp);
+    biela.rotation.z = Math.atan2(pp.y - pin.y, pp.x - pin.x);
+    piston.position.set(0, py - 1.6, 0);
+    const bot = py + .17, h = topeY - .08 - bot; muelle.position.set(0, bot - 2, 0); muelle.scale.set(1, Math.max(.05, h), 1);
+    // luz del foco
+    const k = st.sp * st.sp * (1 + .04 * Math.sin(st.t * 37));
+    luz.intensity = 22 * k; vidrioM.emissiveIntensity = 2.2 * k; filM.emissiveIntensity = 4 * k; halo.material.opacity = Math.min(1, k * 1.1); halo.scale.setScalar(1.5 + 2.5 * k);
+    st.onLight?.(st.sp);
+    // armado / desarmado de cada parte
+    partes.forEach((p, i) => {
+      const kk = ease(Math.min(1, Math.max(0, (st.a * 1.7 - p.delay / N * .7) / 1))), e = 1 - kk;
+      const bob = e * .12 * Math.sin(st.t * 1.3 + i);
+      p.h.position.set(p.p0.x + p.dir.x * e, p.p0.y + p.dir.y * e + bob, p.p0.z + p.dir.z * e);
+      p.h.rotation.set(p.rot.x * e, p.rot.y * e, p.rot.z * e);
+    });
+  };
+  // los holders de biela, pistón y muelle deben estar en el origen armado
+  bielaH.position.set(0, 0, 0); partes.find(p => p.h === bielaH).p0.set(0, 0, 0);
+  pistonH.position.copy(V(P2.x, 1.6, zf)); muelleH.position.copy(V(P2.x, 2, zf));
+  update();
+  return { object: root, update, st };
+}
+
+const heroEl = document.getElementById('hero3d'), heroTag = document.getElementById('heroTag');
+const IDLE_TXT = matchMedia('(hover:hover)').matches ? 'Crea aquí lo que tu mente pueda imaginar' : 'Crea aquí lo que tu mente pueda imaginar · toca aquí';
+heroTag.textContent = IDLE_TXT;
+const hero = new Viewer(heroEl, { speed: .3, tilt: [-.08, .7, 0], fit: 1.0 });
+const maq = maquina(); maq.st.a = 1; maq.update(); hero.set(maq); maq.st.a = 0; maq.update();
+maq.st.onLight = sp => { heroEl.style.boxShadow = sp > .01 ? `0 0 ${60 * sp}px rgba(255,180,80,${.35 * sp}), inset 0 0 ${80 * sp}px rgba(255,170,60,${.12 * sp})` : ''; };
+const armar = on => { maq.st.target = on ? 1 : 0; heroTag.textContent = on ? 'Motor → cadena → engranajes → pistón y dinamo → ¡luz!' : IDLE_TXT; heroTag.style.color = on ? 'var(--accent)' : ''; };
+if (matchMedia('(hover:hover)').matches) { heroEl.addEventListener('pointerenter', () => armar(true)); heroEl.addEventListener('pointerleave', () => armar(false)); }
+else heroEl.addEventListener('click', () => armar(!maq.st.target));
+if (reduced) armar(true);
+
+const grid = document.getElementById('grid');
+PROYECTOS.forEach((p, n) => {
+  const card = document.createElement('article');
+  card.className = 'pieza reveal';
+  card.innerHTML = `<div class="tri">
+      <div class="panel pplano"><span class="tag"><b>01</b>Plano</span><a href="${p.plano}.pdf"><img src="${p.plano}.png" alt="" loading="lazy"></a></div>
+      <div class="panel p3d"><span class="tag"><b>02</b>Modelo 3D · arrastra</span><div class="viewer"></div></div>
+      <div class="panel pvid"><span class="tag"><b>03</b>Impresión real</span><video muted loop playsinline preload="none" poster="${p.video}.jpg" data-auto><source src="${p.video}.mp4" type="video/mp4"></video></div>
+    </div>
+    <div class="body"><div><h3></h3><p></p><div class="flujo">Plano <i>→</i> Modelo 3D <i>→</i> Pieza impresa · <a href="${p.plano}.pdf" style="color:var(--accent)">ver plano en PDF</a></div></div>
+      <ul class="specs">${p.specs.map(([k, v]) => `<li><span>${k}</span><b>${v}</b></li>`).join('')}</ul></div>`;
+  card.querySelector('h3').textContent = p.titulo;
+  card.querySelector('.body p').textContent = p.descripcion;
+  card.querySelector('.pplano img').alt = 'Plano de ' + p.titulo;
+  grid.appendChild(card);
+  const v = new Viewer(card.querySelector('.viewer'));
+  if (MODELOS[p.modelo]) v.set(MODELOS[p.modelo]());
+  else cargarArchivo(p.modelo).then(m => v.set(m)).catch(() => card.querySelector('.p3d .tag').textContent = 'No se encontró el archivo 3D');
+  // en celular, empezar mostrando el modelo 3D (panel del centro)
+  const tri = card.querySelector('.tri');
+  requestAnimationFrame(() => { if (tri.scrollWidth > tri.clientWidth) tri.scrollLeft = card.querySelector('.p3d').offsetLeft - (tri.clientWidth - card.querySelector('.p3d').clientWidth) / 2; });
+});
+
+document.getElementById('mats').innerHTML = MATERIALES.map(m => `<div class="mat"><h4><i style="background:${m.color}"></i>${m.nombre}</h4>
+  <div class="temps"><div><small>Boquilla</small><b>${m.boquilla}</b></div><div><small>Cama</small><b>${m.cama}</b></div></div><p>${m.texto}</p></div>`).join('');
+document.getElementById('imps').innerHTML = IMPRESIONES.map(m => `<article class="imp reveal${m.grande ? ' grande' : ''}">
+  <div class="vid"><span class="badge">${m.material}</span><video muted loop playsinline preload="none" poster="${m.video}.jpg" data-auto><source src="${m.video}.mp4" type="video/mp4"></video></div>
+  <div class="txt"><h3>${m.titulo}</h3><p>${m.texto}</p><div class="chips">${m.chips.map(c => `<span>${c}</span>`).join('')}</div></div></article>`).join('');
+
+const lb = document.getElementById('lb'), lbImg = lb.querySelector('img'), lbCap = lb.querySelector('.cap'), lbL = lb.querySelector('.lienzo');
+let lbSet = [], lbI = 0;
+const lbShow = () => { const m = lbSet[lbI]; lbImg.src = m.src + '.jpg'; lbImg.alt = m.titulo; lbCap.textContent = m.titulo; lbL.classList.remove('z'); lbImg.style.transform = '';
+  lb.querySelectorAll('.nav').forEach(b => b.style.display = lbSet.length > 1 ? '' : 'none'); };
+const abrirLB = (set, i) => { lbSet = set; lbI = i; lbShow(); lb.classList.add('on'); document.body.style.overflow = 'hidden'; };
+const cerrarLB = () => { lb.classList.remove('on'); document.body.style.overflow = ''; };
+lb.querySelector('.cerrar').onclick = cerrarLB;
+lb.onclick = e => { if (e.target === lb) cerrarLB(); };
+lb.querySelector('.prev').onclick = () => { lbI = (lbI - 1 + lbSet.length) % lbSet.length; lbShow(); };
+lb.querySelector('.next').onclick = () => { lbI = (lbI + 1) % lbSet.length; lbShow(); };
+lbL.onclick = e => {
+  const r = lbL.getBoundingClientRect();
+  if (lbL.classList.toggle('z')) { lbImg.style.transformOrigin = `${(e.clientX - r.left) / r.width * 100}% ${(e.clientY - r.top) / r.height * 100}%`; lbImg.style.transform = 'scale(2.6)'; }
+  else lbImg.style.transform = '';
+};
+lbL.onmousemove = e => { if (!lbL.classList.contains('z')) return; const r = lbL.getBoundingClientRect();
+  lbImg.style.transformOrigin = `${(e.clientX - r.left) / r.width * 100}% ${(e.clientY - r.top) / r.height * 100}%`; };
+addEventListener('keydown', e => { if (!lb.classList.contains('on')) return;
+  if (e.key === 'Escape') cerrarLB(); if (e.key === 'ArrowLeft') lb.querySelector('.prev').click(); if (e.key === 'ArrowRight') lb.querySelector('.next').click(); });
+
+const aps = document.getElementById('aps');
+APLICADOS.forEach((p, n) => {
+  const card = document.createElement('article'); card.className = 'ap reveal' + (n % 2 ? ' inv' : '');
+  const etiqueta = t => t === 'video' ? '▶ video' : t === 'fusion' ? 'Fusion 360' : 'foto';
+  card.innerHTML = `<div class="ap-3d"><span class="tag">Vista 360° · arrastra</span><div class="viewer"></div></div>
+    <div class="ap-media"><div class="ap-main"></div><div class="ap-thumbs">${p.media.map((m, i) =>
+      `<button type="button" aria-label="${m.titulo}" ${i ? '' : 'aria-current="true"'}><img src="${m.src}${m.tipo === 'video' ? '' : '-m'}.jpg" alt="" loading="lazy"><span>${etiqueta(m.tipo)}</span></button>`).join('')}</div></div>
+    <div class="ap-body"><div><h3></h3><div class="sub"></div>${p.lugar ? '<div class="lugar">📍 ' + p.lugar + '</div>' : ''}${p.textos.map(() => '<p></p>').join('')}</div>
+      <aside><h4>Aporte</h4><div class="chips">${p.chips.map(c => `<span>${c}</span>`).join('')}</div></aside></div>`;
+  card.querySelector('h3').textContent = p.titulo; card.querySelector('.sub').textContent = p.sub;
+  card.querySelectorAll('.ap-body p').forEach((el, i) => el.textContent = p.textos[i]);
+  aps.appendChild(card);
+  const main = card.querySelector('.ap-main'), fotosZoom = p.media.filter(m => m.zoom);
+  const mostrar = i => {
+    const m = p.media[i];
+    card.querySelectorAll('.ap-thumbs button').forEach((b, k) => b.setAttribute('aria-current', k === i));
+    main.classList.toggle('zoom', !!m.zoom);
+    main.innerHTML = (m.tipo === 'video'
+      ? `<video muted loop playsinline autoplay poster="${m.src}.jpg" data-auto><source src="${m.src}.mp4" type="video/mp4"></video>`
+      : `<img src="${m.src}.jpg" alt="">`) + `<span class="tag">${etiqueta(m.tipo)}</span>${m.zoom ? '<span class="lupa">🔍 Ampliar</span>' : ''}`;
+    const img = main.querySelector('img'); if (img) img.alt = m.titulo;
+    const v = main.querySelector('video'); if (v) { if (reduced) v.removeAttribute('autoplay'); window.vio?.observe(v); }
+    main.onclick = m.zoom ? () => abrirLB(fotosZoom, fotosZoom.indexOf(m)) : null;
+  };
+  card.querySelectorAll('.ap-thumbs button').forEach((b, i) => b.onclick = () => mostrar(i));
+  mostrar(0);
+  giro360(card.querySelector('.ap-3d .viewer'), p.giro);
+});
+
+// videos: se reproducen solo cuando se ven en pantalla (ahorra datos y batería)
+const vio = window.vio = new IntersectionObserver(es => es.forEach(e => {
+  const v = e.target;
+  if (e.isIntersecting && !reduced) { v.preload = 'auto'; v.play().catch(() => {}); } else v.pause();
+}), { threshold: .25 });
+document.querySelectorAll('video[data-auto]').forEach(v => vio.observe(v));
+window.observarReveal?.();
+
+
+
+window.observarReveal?.();
+
+/* ---------- TUS ENSAMBLES — agrega aquí otro .glb si haces más ---------- */
+const ENSAMBLES = [
+  { nombre: 'Sistema biaxial', archivo: 'modelos/biaxial.glb', fit: 1.55, img: 'modelos/mini-biaxial.jpg', n: 52,
+    desc: 'Mecanismo de giro en dos ejes: motores NEMA 17, transmisión con poleas y fajas GT2, estructura de perfiles 2020 y sensor MPU6050.' },
+  { nombre: 'Tornillo sin fin', archivo: 'modelos/tornillo-sin-fin.glb', fit: 1.35, img: 'modelos/mini-tornillo-sin-fin.jpg', n: 43,
+    desc: 'Eje lineal con husillo T8 de 450 mm movido por un motorreductor JGA25-370, guías de varilla lisa de 8 mm, perfiles V-slot 2020 y 2040 y final de carrera.' },
+  { nombre: 'Boquilla secadora', archivo: 'modelos/boquilla.glb', fit: 1.9, img: 'modelos/mini-boquilla.jpg', n: 17,
+    desc: 'Boquilla de giro con ventilador, resistencia calefactora con su placa y borde, rodamiento y soportes del ventilador.' },
+];
+const ensV = new Viewer(document.getElementById('ens3d'), { speed: .6, fit: 1.55 });
+const btn = document.getElementById('btnExp'), sl = document.getElementById('slExp'), au = document.getElementById('autoExp');
+const info = document.getElementById('ensInfo'), tabs = document.getElementById('ensTabs'), hint = document.querySelector('#ens3d .hint');
+const cache = {}; let actual = null, pedido = 0;
+async function mostrarEnsamble(i) {
+  const e = ENSAMBLES[i], yo = ++pedido;
+  [...tabs.children].forEach((b, k) => b.setAttribute('aria-selected', k === i));
+  document.getElementById('ensDesc').textContent = e.desc;
+  hint.textContent = 'Cargando…';
+  try {
+    const m = cache[i] || (cache[i] = await cargarEnsamble(e.archivo));
+    if (yo !== pedido) return;
+    actual = m; ensV.fit = e.fit || 1.5; ensV.set(m);
+    m.st.auto = au.checked; m.st.timer = 0;
+    m.st.onChange = st => { if (st !== actual.st) return; sl.value = Math.round(st.e * 100); btn.textContent = st.target ? 'Armar' : 'Explosionar'; };
+    m.st.ready = false;
+    info.textContent = m.n + ' componentes'; hint.textContent = '⟲ arrastra para girar';
+  } catch (err) { hint.textContent = 'No se encontró ' + e.archivo; }
+}
+ENSAMBLES.forEach((e, i) => {
+  const b = document.createElement('button'); b.type = 'button'; b.role = 'tab'; b.className = 'thumb';
+  b.innerHTML = `<span class="img"><img src="${e.img}" alt="" loading="lazy"><span class="num">0${i + 1}</span></span><span></span><small>${e.n} piezas</small>`;
+  b.children[1].textContent = e.nombre;
+  b.onclick = () => mostrarEnsamble(i); tabs.appendChild(b);
+});
+au.checked = !reduced;
+btn.onclick = () => { if (!actual) return; actual.st.auto = false; au.checked = false; actual.st.target = actual.st.target ? 0 : 1; };
+sl.oninput = () => { if (!actual) return; actual.st.auto = false; au.checked = false; actual.st.target = actual.st.e = sl.value / 100; actual.st.ready = false; };
+au.onchange = () => { if (actual) { actual.st.auto = au.checked; actual.st.timer = 0; } };
+mostrarEnsamble(0);
+
+const clock = new THREE.Clock();
+let t = 0;
+(function loop() {
+  const dt = clock.getDelta();
+  if (!reduced) t += dt;
+  viewers.forEach(v => v.render(t));
+  requestAnimationFrame(loop);
+})();
+</script>
+<script>
+// Bocetos decorativos de fondo (dibujos técnicos a mano alzada, muy tenues)
+(function () {
+  const svg = (vb, body) => `<svg viewBox="${vb}" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" font-family="JetBrains Mono, monospace" font-size="9">${body}</svg>`;
+  const T = (x, y, s, extra = '') => `<text x="${x}" y="${y}" fill="currentColor" stroke="none" ${extra}>${s}</text>`;
+  const flecha = `<defs><marker id="fl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="currentColor" stroke="none"/></marker></defs>`;
+  const gearPath = (cx, cy, z, ro, ri) => {
+    let d = '', s = Math.PI * 2 / z;
+    for (let i = 0; i < z; i++) {
+      const a = i * s;
+      [[ri, a - .42 * s], [ro, a - .17 * s], [ro, a + .17 * s], [ri, a + .42 * s]].forEach(([r, t], j) =>
+        d += `${i || j ? 'L' : 'M'}${(cx + r * Math.cos(t)).toFixed(1)} ${(cy + r * Math.sin(t)).toFixed(1)}`);
+    }
+    return d + 'Z';
+  };
+  let ticks = ''; for (let i = 0; i <= 26; i++) { const x = 30 + i * 8; ticks += `<path d="M${x} 30v${i % 5 ? -5 : -9}"/>`; }
+  const B = {
+    vernier: svg('0 0 270 120', `<path d="M14 30h244v16H14z"/>${ticks}
+      <path d="M14 30V8h12v22M14 46v58h22l4-58"/><rect x="104" y="22" width="52" height="32" rx="4"/>
+      <path d="M104 54v50h20l-2-50"/><circle cx="142" cy="38" r="5"/><path d="M110 46h40"/>
+      ${T(28, 18, '0')}${T(68, 18, '1')}${T(108, 18, '2')}${T(148, 18, '3')}${T(170, 72, 'pie de rey · 0,02 mm')}`),
+    engranaje: svg('0 0 200 200', flecha + `<path d="${gearPath(100, 100, 18, 70, 58)}"/><circle cx="100" cy="100" r="64" stroke-dasharray="8 3 2 3" stroke-width=".8"/>
+      <circle cx="100" cy="100" r="14"/><path d="M10 100h180M100 10v180" stroke-dasharray="10 3 2 3" stroke-width=".7"/>
+      <path d="M30 188h140" marker-start="url(#fl)" marker-end="url(#fl)"/><path d="M30 172v22M170 172v22" stroke-width=".7"/>${T(90, 184, 'Ø140')}
+      <path d="M100 100L148 52" marker-end="url(#fl)"/>${T(126, 66, 'm = 2')}${T(118, 120, 'z = 18')}`),
+    pcb: svg('0 0 230 170', `<rect x="80" y="55" width="62" height="62" rx="3"/>${T(92, 90, 'ESP32')}
+      ${[0, 1, 2, 3, 4, 5].map(i => `<path d="M${88 + i * 9} 55v-10M${88 + i * 9} 117v10M80 ${63 + i * 9}h-10M142 ${63 + i * 9}h10"/>`).join('')}
+      <path d="M70 72H40V30h-20M70 99H30v50M152 81h40v-40M152 108h28v40h30"/><circle cx="20" cy="30" r="4"/><circle cx="30" cy="149" r="4"/><circle cx="192" cy="41" r="4"/><circle cx="210" cy="148" r="4"/>
+      <path d="M97 45V20h20l5-8 6 16 6-16 6 16 6-16 5 8h20"/>${T(120, 10, '10kΩ')}
+      <path d="M115 127v18M105 145h20M105 151h20M115 151v14"/>${T(128, 152, '100nF')}`),
+    codigo: svg('0 0 250 110', `<rect x="4" y="4" width="242" height="102" rx="8" stroke-width=".8"/>
+      ${T(16, 28, 'void loop() {')}${T(30, 46, 'float t = sensor.temp();')}${T(30, 64, 'if (t &gt; 60) ventilador.on();')}${T(30, 82, 'motor.step(200);')}${T(16, 98, '}')}
+      <path d="M210 22l-10 8 10 8M226 22l10 8-10 8M222 18l-8 24"/>`),
+    muelle: svg('0 0 120 220', flecha + `<path d="M40 20h40M40 200h40"/><path d="M60 20v14l-22 8 44 12-44 12 44 12-44 12 44 12-44 12 44 12-44 12 22 8v18"/>
+      <path d="M100 20v180" marker-start="url(#fl)" marker-end="url(#fl)"/>${T(104, 112, 'L₀ = 45', 'transform="rotate(90 104 112)"')}${T(10, 214, 'k = 0,8 N/mm')}`),
+    escuadra: svg('0 0 210 170', `<path d="M10 160V20l140 140z"/><path d="M30 140V68l72 72z"/>
+      ${[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map(i => `<path d="M10 ${150 - i * 11}h${i % 5 ? 5 : 9}"/>`).join('')}
+      <circle cx="170" cy="40" r="4"/><path d="M170 40l-26 90M170 40l24 88M150 120a40 40 0 0 0 40 2"/>${T(120, 30, '45°')}`),
+    rodamiento: svg('0 0 170 170', `<circle cx="85" cy="85" r="70"/><circle cx="85" cy="85" r="56"/><circle cx="85" cy="85" r="34"/><circle cx="85" cy="85" r="22"/>
+      ${[...Array(10)].map((_, i) => { const a = i * Math.PI / 5; return `<circle cx="${(85 + 45 * Math.cos(a)).toFixed(1)}" cy="${(85 + 45 * Math.sin(a)).toFixed(1)}" r="9"/>`; }).join('')}
+      <path d="M5 85h160M85 5v160" stroke-dasharray="10 3 2 3" stroke-width=".7"/>${T(100, 166, '608ZZ')}`),
+    llave: svg('0 0 220 80', `<path d="M40 22a22 22 0 1 0 0 36l10-6h150a8 8 0 0 0 0-24H50z"/><path d="M28 30l12 10-12 10"/><circle cx="198" cy="40" r="4"/>${T(80, 72, 'M8 · 13 mm')}`),
+    motor: svg('0 0 200 130', `<rect x="20" y="25" width="110" height="80" rx="10"/><path d="M130 45h20v40h-20M150 60h40v10h-40"/>
+      <path d="M40 25v80M110 25v80" stroke-dasharray="4 3"/><circle cx="75" cy="65" r="18"/><path d="M68 65h14M75 58v14"/>${T(30, 18, 'NEMA 17 · 1,8°/paso')}${T(40, 124, '42 × 42 mm')}`),
+  };
+  Object.assign(B, {
+    plano: svg('0 0 300 200', flecha + `<rect x="4" y="4" width="292" height="192"/><rect x="12" y="12" width="276" height="176" stroke-width=".7"/>
+      <path d="M40 70h30v-8h70v8h40v40h-40v8H70v-8H40z"/><path d="M30 90h170" stroke-dasharray="10 3 2 3" stroke-width=".7"/>
+      <path d="M40 140h140" marker-start="url(#fl)" marker-end="url(#fl)"/><path d="M40 112v34M180 112v34" stroke-width=".6"/>${T(98, 136, '120')}
+      <path d="M200 70v40" marker-start="url(#fl)" marker-end="url(#fl)"/>${T(205, 93, 'Ø20')}<path d="M105 50v12" marker-end="url(#fl)"/>${T(96, 46, 'Ø28')}
+      <rect x="196" y="146" width="92" height="42" stroke-width=".7"/><path d="M196 160h92M240 160v28" stroke-width=".6"/>${T(200, 156, 'EJE PRINCIPAL')}${T(200, 172, 'ESC 1:1')}${T(244, 172, 'A4')}${T(200, 184, 'Acero 1045')}`),
+    engranajes2: svg('0 0 260 170', `<style>.gs{transform-box:fill-box;transform-origin:center;animation:giro 40s linear infinite}.gs2{animation-direction:reverse;animation-duration:26.7s}@keyframes giro{to{transform:rotate(360deg)}}</style>
+      <path class="gs" d="${gearPath(90, 85, 24, 70, 60)}"/><path class="gs gs2" d="${gearPath(196, 85, 16, 48, 38)}"/>
+      <circle cx="90" cy="85" r="10"/><circle cx="196" cy="85" r="7"/><path d="M90 160h106" stroke-width=".7"/><path d="M90 150v16M196 150v16" stroke-width=".6"/>${T(126, 156, 'a = 106')}`),
+    polea: svg('0 0 260 140', `<circle cx="60" cy="70" r="46"/><circle cx="60" cy="70" r="10"/><circle cx="200" cy="70" r="26"/><circle cx="200" cy="70" r="6"/>
+      <path d="M60 24L200 44M60 116L200 96"/><path d="M60 70h140" stroke-dasharray="10 3 2 3" stroke-width=".7"/>${T(100, 64, 'i = 1,77')}${T(30, 136, 'GT2 · 6 mm')}`),
+    brida: svg('0 0 180 180', `<circle cx="90" cy="90" r="78"/><circle cx="90" cy="90" r="26"/><circle cx="90" cy="90" r="55" stroke-dasharray="6 3 2 3" stroke-width=".7"/>
+      ${[...Array(6)].map((_, i) => { const a = i * Math.PI / 3; return `<circle cx="${(90 + 55 * Math.cos(a)).toFixed(1)}" cy="${(90 + 55 * Math.sin(a)).toFixed(1)}" r="7"/>`; }).join('')}${T(56, 176, '6×Ø6 en Ø110')}`),
+    isometrico: svg('0 0 220 180', `<path d="M20 110l70 40 110-60-70-40z"/><path d="M20 110v-30l70 40v30M90 120l110-60v30M20 80l70-40 40 23"/>
+      <path d="M90 120V60l40-20v40" /><ellipse cx="150" cy="96" rx="9" ry="5"/><ellipse cx="62" cy="112" rx="9" ry="5"/>${T(120, 172, 'soporte · ISO')}`),
+    circuito: svg('0 0 240 150', `<path d="M20 20h200M20 130h200"/><path d="M60 20v30M60 100v30M180 20v30M180 100v30"/><rect x="48" y="50" width="24" height="50" rx="3"/><rect x="168" y="50" width="24" height="50" rx="3"/>
+      <circle cx="120" cy="75" r="16"/>${T(114, 79, 'M')}<path d="M72 75h32M136 75h32"/>${T(10, 14, '+12V')}${T(10, 146, 'GND')}${T(84, 110, 'puente H')}`),
+  });
+  const lugares = [
+    ['inicio', 'engranajes2', 'right:-90px;bottom:-70px;width:230px;transform:rotate(-10deg)'],
+    ['proyectos', 'plano', 'left:-90px;top:120px;width:300px;transform:rotate(-6deg)'],
+    ['proyectos', 'brida', 'right:-50px;top:46%;width:170px'],
+    ['proyectos', 'circuito', 'left:-70px;bottom:6%;width:230px;transform:rotate(7deg)'],
+    ['aplicados', 'plano', 'right:-90px;top:60px;width:280px;transform:rotate(7deg)'],
+    ['aplicados', 'circuito', 'left:-70px;top:45%;width:220px;transform:rotate(-8deg)'],
+    ['aplicados', 'llave', 'right:-40px;bottom:8%;width:200px;transform:rotate(18deg)'],
+    ['ensamble', 'polea', 'right:-60px;top:30px;width:240px;transform:rotate(-8deg)'],
+    ['ensamble', 'engranajes2', 'left:-80px;bottom:10px;width:260px;transform:rotate(12deg)'],
+    ['impresion', 'isometrico', 'left:-60px;top:30px;width:210px'],
+    ['impresion', 'plano', 'right:-80px;top:44%;width:290px;transform:rotate(5deg)'],
+    ['impresion', 'brida', 'left:-40px;top:58%;width:150px'],
+    ['habilidades', 'polea', 'right:-50px;top:30px;width:220px;transform:rotate(6deg)'],
+    ['contacto', 'circuito', 'left:-60px;bottom:0;width:210px;transform:rotate(-6deg)'],
+    ['inicio', 'vernier', 'left:-60px;bottom:-40px;width:300px;transform:rotate(-8deg)'],
+    ['inicio', 'pcb', 'right:-80px;top:20px;width:240px;transform:rotate(6deg)'],
+    ['proyectos', 'engranaje', 'right:-70px;top:40px;width:230px;transform:rotate(12deg)'],
+    ['proyectos', 'muelle', 'left:-50px;top:40%;width:110px;transform:rotate(-14deg)'],
+    ['proyectos', 'llave', 'right:-40px;bottom:12%;width:220px;transform:rotate(-20deg)'],
+    ['ensamble', 'rodamiento', 'left:-60px;top:60px;width:180px'],
+    ['ensamble', 'motor', 'right:-50px;bottom:40px;width:210px;transform:rotate(-6deg)'],
+    ['impresion', 'escuadra', 'right:-40px;top:50px;width:200px;transform:rotate(8deg)'],
+    ['impresion', 'codigo', 'left:-70px;bottom:18%;width:260px;transform:rotate(-5deg)'],
+    ['habilidades', 'engranaje', 'left:-80px;top:10px;width:170px;transform:rotate(-10deg)'],
+    ['contacto', 'vernier', 'right:-60px;top:0;width:250px;transform:rotate(10deg)'],
+  ];
+  lugares.forEach(([id, k, css]) => {
+    const host = document.getElementById(id); if (!host) return;
+    const d = document.createElement('div'); d.className = 'deco'; d.setAttribute('aria-hidden', 'true'); d.style.cssText = css; d.innerHTML = B[k];
+    host.appendChild(d);
+  });
+})();
+</script>
+<div id="lb" role="dialog" aria-modal="true" aria-label="Foto ampliada">
+  <button class="cerrar" type="button">Cerrar ✕</button>
+  <button class="nav prev" type="button" aria-label="Anterior">‹</button>
+  <div class="lienzo"><img alt=""></div>
+  <button class="nav next" type="button" aria-label="Siguiente">›</button>
+  <div class="cap"></div>
+</div>
+</body>
+</html>
