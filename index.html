@@ -157,9 +157,7 @@
   .ap{display:grid;grid-template-columns:1fr 1.2fr;grid-template-areas:"m3d media" "body body";background:var(--card);border:1px solid var(--border);border-radius:18px;overflow:hidden}
   .ap.inv{grid-template-columns:1.2fr 1fr;grid-template-areas:"media m3d" "body body"}
   .ap-3d{grid-area:m3d;position:relative;min-height:420px;background:radial-gradient(circle at 50% 40%,#1a2a44,#0d1626)}
-  .ap-3d .viewer{position:absolute;inset:0;height:auto;background:none;cursor:grab;touch-action:pan-y;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
-  .ap-3d .viewer.drag{cursor:grabbing}
-  .ap-3d .giro{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;pointer-events:none}
+  .ap-3d .viewer{position:absolute;inset:0;height:auto;background:none;}
   .ap-3d .tag,.ap-media .tag{position:absolute;left:12px;top:10px;z-index:2;font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:99px;background:rgba(11,18,32,.78);color:var(--cyan);border:1px solid var(--border);pointer-events:none}
   .ap-media{grid-area:media;display:flex;flex-direction:column;border-left:1px solid var(--border);min-width:0}
   .ap.inv .ap-media{border-left:0;border-right:1px solid var(--border)}
@@ -322,7 +320,7 @@
     <div class="head reveal">
       <div class="mono">02 — Proyectos aplicados</div>
       <h2>Diseños en uso real</h2>
-      <p>Piezas que diseñé en Fusion 360 para una empresa y que hoy están instaladas y en uso, una de ellas en un colegio de Lima. Gira cada pieza en 360° y revisa las fotos: las que tienen lupa se pueden ampliar para ver los detalles.</p>
+      <p>Piezas que diseñé en Fusion 360 para una empresa y que hoy están instaladas y en uso, una de ellas en un colegio de Lima. Gira cada modelo 3D y revisa las fotos: las que tienen lupa se pueden ampliar para ver los detalles.</p>
     </div>
     <div class="aps" id="aps"></div>
   </div>
@@ -437,10 +435,10 @@ const PROYECTOS = [
 ];
 
 /* ---------- PROYECTOS APLICADOS — edita textos y fotos aquí ----------
-   giro: carpeta con 36 imágenes 360° (00.webp … 35.webp). media: tipo 'foto' | 'fusion' | 'video'. zoom: true solo en fotos nítidas y de buena resolución */
+   media: tipo 'foto' | 'fusion' | 'video'. zoom: true solo en fotos nítidas y de buena resolución */
 const APLICADOS = [
   { titulo: 'Panel frontal con iconografía integrada', sub: 'Diseño de señalización · Impresión 3D multimaterial',
-    giro: 'modelos/360/panel-iconografia',
+    modelo: 'modelos/aplicados/panel-iconografia.glb', tilt: [0, Math.PI, 0],
     textos: ['La empresa necesitaba que cada LED del panel indicara su función. Diseñé un ícono para cada uno (NFC, conexión, energía, encendido y llave), pensados para que cualquier persona entienda el estado del equipo sin leer un manual.',
       'Los íconos se imprimen junto con la pieza, en un segundo material con la doble boquilla: sin pintura ni stickers, no se despegan ni se borran con el uso. En la parte posterior diseñé arandelas de sujeción (en rojo) que fijan el panel y facilitan su instalación en el equipo.'],
     chips: ['Diseño de iconografía', 'Señalización', 'Sujeción de fácil instalación', 'Multimaterial', 'Fusion 360'],
@@ -451,7 +449,7 @@ const APLICADOS = [
       { tipo: 'fusion', src: 'fotos/panel-fusion-1', titulo: 'Diseño en Fusion 360: íconos como cuerpos separados', zoom: true },
       { tipo: 'fusion', src: 'fotos/panel-fusion-2', titulo: 'Diseño en Fusion 360: reverso y arandelas de sujeción', zoom: true }] },
   { titulo: 'Soporte para llave térmica monopolar', sub: 'Diseño a medida · Montaje eléctrico',
-    giro: 'modelos/360/soporte-itm',
+    modelo: 'modelos/aplicados/soporte-itm.glb', color: 0xb9c0c9,
     textos: ['La empresa necesitaba montar una llave térmica (ITM) monopolar en el equipo. Diseñé un soporte a medida que la mantiene firme en su lugar y la deja al alcance para accionarla.'],
     chips: ['Diseño a medida', 'Protección eléctrica', 'Fusion 360'],
     media: [
@@ -459,7 +457,7 @@ const APLICADOS = [
       { tipo: 'fusion', src: 'fotos/itm-fusion', titulo: 'Diseño del soporte en Fusion 360', zoom: true }] },
   { titulo: 'Organizador de cables para coche portalaptops', sub: 'Gestión de cables · Uso escolar diario',
     lugar: 'Instalado en el Colegio Nuestra Señora del Consuelo · Lima',
-    giro: 'modelos/360/regleta-cables',
+    modelo: 'modelos/aplicados/regleta-cables.glb', color: 0x9fb4c8,
     textos: ['Regleta para ordenar los cables de carga de un coche portalaptops. Cada laptop tiene su posición numerada y su cable sujeto, así se conectan en orden y los cables no se enredan con el uso diario.'],
     chips: ['En uso en un colegio', 'Gestión de cables', 'Fusion 360'],
     media: [
@@ -467,7 +465,7 @@ const APLICADOS = [
       { tipo: 'video', src: 'videos/regleta-cables', titulo: 'Coche portalaptops con los cables ordenados' },
       { tipo: 'fusion', src: 'fotos/regleta-fusion', titulo: 'Diseño de la regleta en Fusion 360', zoom: true }] },
   { titulo: 'Sujetador para módulo Sonoff y guía de soldadura', sub: 'Domótica · Diseño de utillaje',
-    giro: 'modelos/360/sujetador-sonoff',
+    modelo: 'modelos/aplicados/sujetador-sonoff.glb', color: 0x7fb48a,
     textos: ['La empresa pidió un sujetador para montar un Sonoff, un módulo de domótica (relé inteligente controlado por Wi-Fi). Diseñé la carcasa que lo sujeta y, como pieza aparte, una guía de soldadura: una plantilla que ubica los pernos para soldarlos en la posición exacta donde encaja el sujetador.'],
     chips: ['Domótica', 'Guía de soldadura', 'Utillaje', 'Fusion 360'],
     media: [
@@ -745,25 +743,6 @@ class Viewer {
   }
 }
 
-/* ---------- Vista 360° por imágenes (piezas de empresa: no se publica el archivo 3D) ---------- */
-function giro360(el, carpeta, n = 36) {
-  const img = document.createElement('img'); img.alt = 'Vista 360° de la pieza'; img.draggable = false;
-  img.className = 'giro'; el.appendChild(img);
-  const frames = []; let i = 0, cargado = false, visible = false, arrastrando = false, x0 = 0, i0 = 0, ultimo = 0, quieto = 0;
-  const src = k => `${carpeta}/${String(k).padStart(2, '0')}.webp`;
-  img.src = src(0);
-  const cargar = () => { if (cargado) return; cargado = true; for (let k = 0; k < n; k++) { const im = new Image(); im.src = src(k); frames[k] = im; } };
-  const ver = k => { i = ((k % n) + n) % n; const f = frames[i]; img.src = f && f.complete ? f.src : src(i); };
-  new IntersectionObserver(es => es.forEach(e => { visible = e.isIntersecting; if (visible) cargar(); }), { rootMargin: '300px' }).observe(el);
-  el.addEventListener('pointerdown', e => { arrastrando = true; x0 = e.clientX; i0 = i; el.setPointerCapture(e.pointerId); el.classList.add('drag'); });
-  el.addEventListener('pointermove', e => { if (!arrastrando) return; ver(i0 - Math.round((e.clientX - x0) / Math.max(6, el.clientWidth / n / 1.2))); });
-  const soltar = () => { arrastrando = false; quieto = performance.now(); el.classList.remove('drag'); };
-  el.addEventListener('pointerup', soltar); el.addEventListener('pointercancel', soltar);
-  el.addEventListener('contextmenu', e => e.preventDefault());
-  const loop = t => { if (visible && !arrastrando && !reduced && t - quieto > 2500 && t - ultimo > 110) { ultimo = t; ver(i + 1); } requestAnimationFrame(loop); };
-  requestAnimationFrame(loop);
-}
-
 /* ---------- Construir la página ---------- */
 /* ---------- Máquina de la portada: se arma al pasar el mouse y enciende un foco ---------- */
 function maquina() {
@@ -980,7 +959,7 @@ const aps = document.getElementById('aps');
 APLICADOS.forEach((p, n) => {
   const card = document.createElement('article'); card.className = 'ap reveal' + (n % 2 ? ' inv' : '');
   const etiqueta = t => t === 'video' ? '▶ video' : t === 'fusion' ? 'Fusion 360' : 'foto';
-  card.innerHTML = `<div class="ap-3d"><span class="tag">Vista 360° · arrastra</span><div class="viewer"></div></div>
+  card.innerHTML = `<div class="ap-3d"><span class="tag">Modelo 3D · arrastra</span><div class="viewer"></div></div>
     <div class="ap-media"><div class="ap-main"></div><div class="ap-thumbs">${p.media.map((m, i) =>
       `<button type="button" aria-label="${m.titulo}" ${i ? '' : 'aria-current="true"'}><img src="${m.src}${m.tipo === 'video' ? '' : '-m'}.jpg" alt="" loading="lazy"><span>${etiqueta(m.tipo)}</span></button>`).join('')}</div></div>
     <div class="ap-body"><div><h3></h3><div class="sub"></div>${p.lugar ? '<div class="lugar">📍 ' + p.lugar + '</div>' : ''}${p.textos.map(() => '<p></p>').join('')}</div>
@@ -1002,7 +981,8 @@ APLICADOS.forEach((p, n) => {
   };
   card.querySelectorAll('.ap-thumbs button').forEach((b, i) => b.onclick = () => mostrar(i));
   mostrar(0);
-  giro360(card.querySelector('.ap-3d .viewer'), p.giro);
+  const v = new Viewer(card.querySelector('.ap-3d .viewer'), { speed: 1, tilt: p.tilt || null });
+  cargarGLB(p.modelo, p.color).then(m => v.set(m)).catch(() => card.querySelector('.ap-3d .tag').textContent = 'No se encontró el modelo 3D');
 });
 
 // videos: se reproducen solo cuando se ven en pantalla (ahorra datos y batería)
