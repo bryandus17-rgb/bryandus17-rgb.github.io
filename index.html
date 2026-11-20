@@ -210,7 +210,7 @@
   .tabs button:hover{color:var(--text);border-color:var(--cyan)}
   .tabs button[aria-selected=true]{background:rgba(255,122,26,.14);color:var(--accent);border-color:var(--accent)}
   #ensDesc{color:var(--muted);max-width:760px;margin-bottom:18px;min-height:3.2em}
-  .fea{display:grid;grid-template-columns:1.35fr 1fr;gap:26px;align-items:center;background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px}
+  .fea{display:block}
   .fea-img{position:relative;display:block;padding:0;border:1px solid var(--border);border-radius:12px;overflow:hidden;cursor:zoom-in;background:#0b1220}
   .fea-img img{display:block;width:100%;height:auto;transition:transform .5s}
   .fea-img:hover img{transform:scale(1.02)}
@@ -368,21 +368,9 @@
     <div class="head reveal">
       <div class="mono">04 — Análisis</div>
       <h2>Análisis de esfuerzos</h2>
-      <p>No basta con que una pieza se vea bien: tiene que aguantar. Simulo por elementos finitos cómo trabajan mis piezas impresas, considerando el material, las paredes y el porcentaje de relleno.</p>
     </div>
     <div class="fea reveal">
-      <button type="button" class="fea-img" id="feaImg" aria-label="Ampliar lámina de análisis de esfuerzos"><img src="planos/analisis-esfuerzos-secadora-m.jpg" alt="Lámina de análisis de esfuerzos de los sujetadores de la secadora" loading="lazy"><span class="lupa">🔍 Ampliar</span></button>
-      <div class="fea-txt">
-        <div class="mono">Análisis de esfuerzos · MEF</div>
-        <h3>¿Aguantan los sujetadores de la secadora?</h3>
-        <p>Analicé por elementos finitos los dos brazos que sostienen la boquilla secadora sobre el tornillo sin fin, impresos en ABS con 2 paredes y 50 % de relleno. Tomé la geometría, el material y el peso de la boquilla de Inventor y consideré un caso de servicio y uno accidental.</p>
-        <ul class="fea-kpi">
-          <li><b>FS &gt; 2</b><span>Diseño resistente en todos los casos de carga</span></li>
-          <li><b>0,04 mm</b><span>Flecha en servicio</span></li>
-          <li><b>50 %</b><span>Relleno con 2 paredes en ABS</span></li>
-        </ul>
-        <a class="link" href="planos/analisis-esfuerzos-secadora.pdf">Ver lámina en PDF (A3) →</a>
-      </div>
+      <button type="button" class="fea-img" id="feaImg" aria-label="Ampliar lámina de análisis de esfuerzos"><img src="planos/analisis-esfuerzos-secadora.jpg" alt="Lámina de análisis de esfuerzos de los sujetadores de la secadora" loading="lazy"><span class="lupa">🔍 Ampliar</span></button>
     </div>
   </div>
 </section>
